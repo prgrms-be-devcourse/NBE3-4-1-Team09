@@ -1,0 +1,6 @@
+rootProject.name = 'cafemanagement'
+
+// include 모듈 설정
+include ':backend', ':frontend'
+project(':backend').projectDir = new File(rootDir, 'backend')
+project(':frontend').projectDir = new File(rootDir, 'frontend')
