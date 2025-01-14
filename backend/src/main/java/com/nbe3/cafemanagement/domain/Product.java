@@ -1,4 +1,4 @@
-package domain;
+package com.nbe3.cafemanagement.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
