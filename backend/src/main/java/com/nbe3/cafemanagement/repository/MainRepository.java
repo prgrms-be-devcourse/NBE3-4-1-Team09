@@ -1,4 +1,7 @@
 package com.nbe3.cafemanagement.repository;
 
-public interface MainRepository {
+import com.nbe3.cafemanagement.domain.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MainRepository extends JpaRepository<Product, Long> {
 }
