@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -23,17 +24,18 @@ public class Order {
     @Setter(AccessLevel.PRIVATE)
     private Long id;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String address;
 
-    private Date orderDate;
+    private LocalDate orderDate;
 
-    @Column(length = 20)
+    @Column(nullable = false, length = 20)
     private String status;
 
+    @Column(nullable = false)
     private int totalPrice;
 
     @CreatedDate
