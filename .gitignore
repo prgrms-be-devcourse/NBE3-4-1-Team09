@@ -35,7 +35,5 @@ out/
 
 ### VS Code ###
 .vscode/
-
-
-### Custom ###
-/backend/src/main/resources/application.properties
+resources/application.properties
+application.properties
