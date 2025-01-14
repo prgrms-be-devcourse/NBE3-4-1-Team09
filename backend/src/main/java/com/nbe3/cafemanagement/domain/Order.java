@@ -1,14 +1,13 @@
-package domain;
+package com.nbe3.cafemanagement.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -19,21 +18,27 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class OrderDetail {
+public class Order {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Setter(AccessLevel.PRIVATE)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Order order;
+    @Column(nullable = false, unique = true)
+    private String email;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Product product;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String address;
+
+    private LocalDate orderDate;
+
+    @Column(nullable = false, length = 20)
+    private String status;
 
     @Column(nullable = false)
-    private int quantity;
+    private int totalPrice;
 
-    @Column(nullable = false)
-    private int price;
+    @CreatedDate
+    @Setter(AccessLevel.PRIVATE)
+    private LocalDateTime createAt;
 }
