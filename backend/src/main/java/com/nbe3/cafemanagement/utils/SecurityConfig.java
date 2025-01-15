@@ -20,7 +20,8 @@ public class SecurityConfig {
                                 "/admin/register",
                                 "/css/**",
                                 "/js/**",
-                                "/master/checkProduct").permitAll()  // 인증 없이 접근 허용
+                                "/master/checkProduct",
+                                "/order/payment").permitAll()  // 인증 없이 접근 허용
                         .requestMatchers("/admin/**").authenticated()  // /admin/** 경로는 인증 필요
                 )
                 .formLogin(form -> form
