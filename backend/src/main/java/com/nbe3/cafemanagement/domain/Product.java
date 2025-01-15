@@ -10,12 +10,13 @@ import lombok.Setter;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private int id;
+    private Long id;
 
     private String name;
 
     private int price;
 
     private String description;
+
+    private String imageUrl;
 }
