@@ -4,6 +4,9 @@ import lombok.*;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDto {
     @NotBlank(message = "Name cannot be blank")
     @Size(max = 50, message = "Name must be less than 50 characters")

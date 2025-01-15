@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,6 +27,12 @@ public class AdminProductController {
         return "admin/product/new";
     }
 
+    @GetMapping("/edit/{id}")
+    public String editPage(Model model, @PathVariable int id) {
+        model.addAttribute("product", adminProductService.getProduct(id));
+        return "admin/product/edit";
+    }
+
     @PostMapping("/new")
     public String createProduct(@Valid @ModelAttribute("product") ProductDto product, BindingResult bindingResult, Model model) {
 
@@ -40,8 +43,16 @@ public class AdminProductController {
         return "redirect:/admin/product/main";
     }
 
-//    @GetMapping("/edit")
-//    public String editPage() {
-//        return "admin/product/admin_product_edit";
-//    }
+    @PutMapping("/edit/{id}")
+    public String editProduct(@Valid @ModelAttribute("product") ProductDto product,
+                              BindingResult bindingResult,
+                              Model model,
+                              @PathVariable int id) {
+        if (bindingResult.hasErrors()) {
+            return "admin/product/edit";
+        }
+        adminProductService.update(product, id);
+        return "redirect:/admin/product/main";
+    }
 }
+
