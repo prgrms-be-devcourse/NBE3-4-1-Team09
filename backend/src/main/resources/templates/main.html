@@ -47,15 +47,8 @@
         <h5 class="m-0 p-0"><b>Summary</b></h5>
       </div>
       <hr>
-      <div class="row">
-        <h6 class="p-0">Columbia Nariñó <span class="badge bg-dark text-">2개</span></h6>
-      </div>
-      <div class="row">
-        <h6 class="p-0">Brazil Serra Do Caparaó <span class="badge bg-dark">2개</span></h6>
-      </div>
-      <div class="row">
-        <h6 class="p-0">Columbia Nariñó <span class="badge bg-dark">2개</span></h6>
-      </div>
+      <!-- 여기서부터 상품 리스트가 동적으로 추가됨 -->
+      <div id="summary-container"></div>  <!-- Summary 항목을 추가할 컨테이너 -->
       <form>
         <div class="mb-3">
           <label for="email" class="form-label">이메일</label>
@@ -73,11 +66,14 @@
       </form>
       <div class="row pt-2 pb-2 border-top">
         <h5 class="col">총금액</h5>
-        <h5 class="col text-end">15000원</h5>
+        <h5 class="col text-end" id="total-price">0원</h5>  <!-- 총 금액 표시 -->
       </div>
       <button class="btn btn-dark col-12">결제하기</button>
     </div>
   </div>
 </div>
+
+<!-- 장바구니 기능 javascript -->
+<script src="/js/summary.js"></script>
 </body>
 </html>
