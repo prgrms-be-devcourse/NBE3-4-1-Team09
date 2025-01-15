@@ -35,7 +35,6 @@ public class AdminProductController {
 
     @PostMapping("/new")
     public String createProduct(@Valid @ModelAttribute("product") ProductDto product, BindingResult bindingResult, Model model) {
-
         if (bindingResult.hasErrors()) {
             return "admin/product/new";
         }
@@ -52,6 +51,12 @@ public class AdminProductController {
             return "admin/product/edit";
         }
         adminProductService.update(product, id);
+        return "redirect:/admin/product/main";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable int id) {
+        adminProductService.deleteProduct(id);
         return "redirect:/admin/product/main";
     }
 }
