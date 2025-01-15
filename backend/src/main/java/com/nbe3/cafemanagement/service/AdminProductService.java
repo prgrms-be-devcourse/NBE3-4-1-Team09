@@ -28,7 +28,7 @@ public class AdminProductService {
         adminProductRepository.save(product);
     }
 
-    public void update(ProductDto productDto, int id) {
+    public void update(ProductDto productDto, long id) {
         if (!adminProductRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 상품입니다.");
         }
@@ -41,7 +41,7 @@ public class AdminProductService {
         adminProductRepository.save(product);
     }
 
-    public ProductDto getProduct(int id) {
+    public ProductDto getProduct(long id) {
         Product product = adminProductRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 상품 id 입니다, id=%d".formatted(id)));
 
@@ -53,7 +53,7 @@ public class AdminProductService {
                 .build();
     }
 
-    public void deleteProduct(int id) {
+    public void deleteProduct(long id) {
         if (!adminProductRepository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 상품 id 입니다, id=%d".formatted(id));
         }
