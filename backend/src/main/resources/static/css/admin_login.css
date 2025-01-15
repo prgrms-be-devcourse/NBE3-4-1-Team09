@@ -1,0 +1,30 @@
+body {
+    background: #ddd;
+    font-family: Arial, sans-serif;
+}
+
+.card {
+    margin: auto;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 1rem;
+    border: transparent;
+    background-color: white;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form {
+    padding: 20px;
+}
+
+.btn-dark {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+}
