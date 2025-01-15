@@ -1,10 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>관리자 메인</title>
 </head>
 <body>
+<h1>관리자 메인 페이지</h1>
+<p>Welcome, <span th:text="${username}"></span>! You have successfully logged in.</p>
 
+<nav>
+    <ul>
+        <li><a th:href="@{/admin/order}">Order Management</a></li>
+        <li><a th:href="@{/admin/product}">Product Management</a></li>
+        <li><a th:href="@{/admin/login}">로그아웃</a></li>
+    </ul>
+</nav>
 </body>
 </html>

@@ -1,25 +1,33 @@
 package com.nbe3.cafemanagement.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+
 @Getter
 @Setter
 @Entity
+@Table(name = "admin")
 public class Admin {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    private LocalDateTime created_at;
-
+    @Column(nullable = false, unique = true, length = 50)
     private String username;
 
+    @Column(nullable = false, length = 255)
     private String password;
+
+    @Column(name = "created_at", updatable = false, nullable = true)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
