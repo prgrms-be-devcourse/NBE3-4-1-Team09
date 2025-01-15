@@ -2,17 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Main Page</title>
+    <title>관리자 메인</title>
 </head>
 <body>
-<h1>Admin Main Page</h1>
-<p>Welcome, Admin! You have successfully logged in.</p>
+<h1>관리자 메인 페이지</h1>
+<p>Welcome, <span th:text="${username}"></span>! You have successfully logged in.</p>
 
 <nav>
     <ul>
         <li><a th:href="@{/admin/order}">Order Management</a></li>
         <li><a th:href="@{/admin/product}">Product Management</a></li>
-        <li><a th:href="@{/admin/login}">Logout</a></li>
+        <li><a th:href="@{/admin/login}">로그아웃</a></li>
     </ul>
 </nav>
 </body>
