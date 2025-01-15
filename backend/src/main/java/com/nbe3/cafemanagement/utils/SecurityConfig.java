@@ -14,7 +14,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/admin/login", "/admin/register", "/css/**", "/js/**").permitAll()  // 인증 없이 접근 허용
+                        .requestMatchers(
+                                "/",
+                                "/admin/login",
+                                "/admin/register",
+                                "/css/**",
+                                "/js/**",
+                                "/master/checkProduct").permitAll()  // 인증 없이 접근 허용
                         .requestMatchers("/admin/**").authenticated()  // /admin/** 경로는 인증 필요
                 )
                 .formLogin(form -> form
