@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface AdminProductRepository extends JpaRepository<Product, Integer> {
+public interface AdminProductRepository extends JpaRepository<Product, Long> {
     boolean existsByName(String name);
 }

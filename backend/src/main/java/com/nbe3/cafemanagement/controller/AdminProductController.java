@@ -28,7 +28,7 @@ public class AdminProductController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editPage(Model model, @PathVariable int id) {
+    public String editPage(Model model, @PathVariable long id) {
         model.addAttribute("product", adminProductService.getProduct(id));
         return "admin/product/edit";
     }
@@ -46,7 +46,7 @@ public class AdminProductController {
     public String editProduct(@Valid @ModelAttribute("product") ProductDto product,
                               BindingResult bindingResult,
                               Model model,
-                              @PathVariable int id) {
+                              @PathVariable long id) {
         if (bindingResult.hasErrors()) {
             return "admin/product/edit";
         }
@@ -55,7 +55,7 @@ public class AdminProductController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable int id) {
+    public String deleteProduct(@PathVariable long id) {
         adminProductService.deleteProduct(id);
         return "redirect:/admin/product/main";
     }
