@@ -15,13 +15,14 @@ public class OrderService {
     private final OrderRepository orderRepository;
 
     public Order save(String email, String address, String postcode, int totalPrice) {
-
-        return Order.builder()
+        Order order = Order.builder()
                 .email(email)
                 .address(address + "|" + postcode)
                 .totalPrice(totalPrice)
                 .orderDate(LocalDate.now())
                 .status(Order.OrderStatus.READY)
                 .build();
+        
+        return orderRepository.save(order);
     }
 }

@@ -27,8 +27,11 @@ public class OrderController {
                           BindingResult bindingResult
                           ) {
         if (bindingResult.hasErrors()) {
+            System.out.println("여기1");
             return "main";
         }
+
+        System.out.println("여기2");
         Order order = orderService.save(paymentForm.getEmail(), paymentForm.getAddress(), paymentForm.getPostcode(), totalPrice);
         OrderDetail orderDetail = orderDetailService.save();
 
