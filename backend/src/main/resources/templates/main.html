@@ -56,18 +56,21 @@
       <div class="row">
         <h6 class="p-0">Columbia Nariñó <span class="badge bg-dark">2개</span></h6>
       </div>
-      <form action="/order/payment" method="POST" th:object="${paymentForm}">
+      <form action="/order/payment" method="POST" th:object="${orderDto}">
         <div class="mb-3">
           <label for="email" class="form-label">이메일</label>
           <input type="email" class="form-control mb-1" th:field="*{email}">
+          <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
         </div>
         <div class="mb-3">
           <label for="address" class="form-label">주소</label>
           <input type="text" class="form-control mb-1" th:field="*{address}">
+          <div class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
         </div>
         <div class="mb-3">
           <label for="postcode" class="form-label">우편번호</label>
           <input type="text" class="form-control" th:field="*{postcode}">
+          <div class="text-danger" th:if="${#fields.hasErrors('postcode')}" th:errors="*{postcode}"></div>
         </div>
         <div>당일 오후 2시 이후의 주문은 다음날 배송을 시작합니다.</div>
         <div class="row pt-2 pb-2 border-top">
