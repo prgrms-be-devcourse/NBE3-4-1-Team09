@@ -9,9 +9,9 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class OrderRequest {
-    private String sortBy;
-    private String searchParam;
-    private String userEmail;
-    private Integer page;
-    private Integer pageSize;
+    private String sortBy = "";
+    private String searchParam = "";
+    private String userEmail = "";
+    private int page = 1;
+    private int pageSize = 30;
 }

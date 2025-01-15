@@ -9,12 +9,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigInteger;
+import java.util.List;
 
 public interface AdminOrderManageRepository extends JpaRepository<OrderDetail, BigInteger> {
-    @Query("select OrderDetail od from OrderDetail od \n" +
-        "inner join `Order` o ON order_id = o.id\n" +
-        "inner join Product p on product_id = p.id")
-    Page<OrderDetail> findAll(@Param("userEmail") String userEmail,
-                              @Param("searchParam") String searchParam,
-                              Pageable pageable);
+    @Query("SELECT od FROM OrderDetail od\n" +
+        "JOIN fetch od.order o\n" +
+        "JOIN fetch od.product p\n" +
+        "where o.email like %:userEmail% and\n" +
+        "p.name like %:searchParam%")
+    List<OrderDetail> findAll(@Param("userEmail") String userEmail,
+                              @Param("searchParam") String searchParam
+                              );
+
+    List<OrderDetail> findByOrder_Id(Long orderId);
 }

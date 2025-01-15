@@ -27,7 +27,16 @@
             </select>
         </div>
     </form>
-
+    <ul class="list-group col-6 mt-3">
+        <li class="list-group-item" th:each="order, loop : ${orderList}">
+            <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1" th:text="${order.email}" ></h6>
+                <h6 class="mb-1" th:text="${order.status}" ></h6>
+                <h6 class="mb-1" th:text="${order.products}" ></h6>
+                <h6 class="mb-1" th:text="${order.orderId}" ></h6>
+            </div>
+        </li>
+    </ul>
     <div id="orderDetails" class="mt-4">
         <h5>주문 내역</h5>
         <table class="table table-bordered mt-2">
