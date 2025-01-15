@@ -1,6 +1,7 @@
 package com.nbe3.cafemanagement.controller;
 
 import com.nbe3.cafemanagement.domain.Product;
+import com.nbe3.cafemanagement.dto.OrderDto;
 import com.nbe3.cafemanagement.service.MainService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +22,7 @@ public class MainController {
 
     // 상품 목록 페이지
     @GetMapping("/checkProduct")
-    public String checkProduct(Model model) {
+    public String checkProduct(Model model, OrderDto orderDto) {
 
         List<Product> products = mainService.getAllProducts();
 
