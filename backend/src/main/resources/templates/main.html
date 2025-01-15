@@ -36,6 +36,8 @@
           </div>
           <!-- 가격 -->
           <div class="col text-center price" th:text="${product.price} + '원'">가격</div>
+          <!-- 숨겨진 input으로 상품 ID 추가 -->
+          <input type="hidden" th:value="${product.id}" class="product-id">
           <div class="col text-end action">
             <a class="btn btn-small btn-outline-dark" href="#" th:text="'추가'"></a>
           </div>
@@ -49,7 +51,7 @@
       <hr>
       <!-- 여기서부터 상품 리스트가 동적으로 추가됨 -->
       <div id="summary-container"></div>  <!-- Summary 항목을 추가할 컨테이너 -->
-      <form>
+      <form id="order-form" action="/order/payment" method="POST">
         <div class="mb-3">
           <label for="email" class="form-label">이메일</label>
           <input type="email" class="form-control mb-1" id="email">
@@ -63,12 +65,18 @@
           <input type="text" class="form-control" id="postcode">
         </div>
         <div>당일 오후 2시 이후의 주문은 다음날 배송을 시작합니다.</div>
+
+        <!-- 숨겨진 input 요소들 추가 -->
+        <input type="hidden" name="products" id="products">  <!-- 상품 목록 JSON -->
+        <input type="hidden" name="totalAmount" id="totalAmount">  <!-- 총액 -->
+
+        <div class="row pt-2 pb-2 border-top">
+          <h5 class="col">총금액</h5>
+          <h5 class="col text-end" id="total-price">0원</h5>
+        </div>
+        <button type="submit" class="btn btn-dark col-12">결제하기</button>
       </form>
-      <div class="row pt-2 pb-2 border-top">
-        <h5 class="col">총금액</h5>
-        <h5 class="col text-end" id="total-price">0원</h5>  <!-- 총 금액 표시 -->
-      </div>
-      <button class="btn btn-dark col-12">결제하기</button>
+
     </div>
   </div>
 </div>
