@@ -7,14 +7,15 @@ document.querySelectorAll('.btn-outline-dark').forEach((button) => {
 
         // 상품 정보 가져오기
         const productCard = this.closest('li');
+        const productId = productCard.querySelector('.product-id').value;  // 상품 ID 가져오기
         const productName = productCard.querySelector('.row:nth-child(2)').textContent.trim();
         const productPrice = parseInt(productCard.querySelector('.price').textContent.replace('원', '').trim());
 
         // Summary에 추가 또는 수량 증가
-        if (summaryItems[productName]) {
-            summaryItems[productName].count += 1;
+        if (summaryItems[productId]) {
+            summaryItems[productId].count += 1;
         } else {
-            summaryItems[productName] = { name: productName, price: productPrice, count: 1 };
+            summaryItems[productId] = { id: productId, name: productName, price: productPrice, count: 1 };
         }
 
         updateSummary();  // Summary 업데이트
@@ -46,9 +47,15 @@ document.querySelector('.btn-dark').addEventListener('click', function (event) {
     event.preventDefault();  // 페이지 새로고침 방지
 
     // 사용자 입력값 가져오기
-    const email = document.getElementById('email').value.trim();
-    const address = document.getElementById('address').value.trim();
-    const postcode = document.getElementById('postcode').value.trim();
+    const emailInput = document.getElementById('email').value.trim();
+    const addressInput = document.getElementById('address').value.trim();
+    const postcodeInput = document.getElementById('postcode').value.trim();
+
+
+    if (!emailInput || !addressInput || !postcodeInput) {
+        alert('모든 필드를 입력해주세요.');
+        return;  // 입력이 안 된 경우 제출 중단
+    }
 
     // 상품 데이터 정리
     const products = Object.values(summaryItems).map(item => ({
