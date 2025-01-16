@@ -22,4 +22,5 @@ public class AdminOrderManageController {
         adminOrderManageService.updateStatus(setStateRequest);
         return "admin/admin_order";
     }
+
 }

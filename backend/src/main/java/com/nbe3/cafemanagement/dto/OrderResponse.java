@@ -25,10 +25,6 @@ public class OrderResponse {
     private int totalPrice;
     private Long orderId;
 
-    //OrderDetail 엔티티 속성
-    private int quantity;
-    private int price;
-
     //Product 엔티티 속성
     private List<ProductExtendedInfo> products;
 

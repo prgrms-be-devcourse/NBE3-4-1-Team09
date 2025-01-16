@@ -23,10 +23,10 @@ public class AdminOrderManageControllerTest {
 
     @Test
     @WithUserDetails("root")
-    public void helloTest() throws Exception {
+    public void updateTest() throws Exception {
         mockMvc.perform(put("/admin/editStatus")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"orderId\": \"1\", \"status\": \"배송완료\"}")
+                .content("{\"orderId\": \"1\", \"status\": \"\"}")
                 .with(csrf())// 요청 본문 (JSON)
             )
            // "/hello" 요청 수행

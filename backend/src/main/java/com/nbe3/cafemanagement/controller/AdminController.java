@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.List;
 
 
 @Controller
@@ -71,7 +72,9 @@ public class AdminController {
     public String orderListPage(Model model,
                             @Valid @ModelAttribute OrderRequest orderRequest) {
         Page<OrderResponse> list = adminOrderManageService.getList(orderRequest);
+        List<String> users = adminOrderManageService.getAllUsers();
         model.addAttribute("orderList", list);
+        model.addAttribute("users", users);
         return "admin/admin_order";
     }
 

@@ -2,6 +2,7 @@ package com.nbe3.cafemanagement.repository;
 
 import com.nbe3.cafemanagement.domain.OrderDetail;
 import com.nbe3.cafemanagement.dto.OrderRequest;
+import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,6 +21,12 @@ public interface AdminOrderManageRepository extends JpaRepository<OrderDetail, B
     List<OrderDetail> findAll(@Param("userEmail") String userEmail,
                               @Param("searchParam") String searchParam
                               );
+
+    @NonNull
+    @Query("SELECT od FROM OrderDetail od\n" +
+        "JOIN fetch od.order o\n" +
+        "JOIN fetch od.product p\n")
+    List<OrderDetail> findAll();
 
     List<OrderDetail> findByOrder_Id(Long orderId);
 }

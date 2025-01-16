@@ -15,6 +15,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +43,12 @@ public class AdminOrderManageService {
         return new PageImpl<>(discarded, pageable, discarded.size());
     }
 
+    public List<String> getAllUsers() {
+        return adminOrderManageRepository.findAll().stream().map(
+            orderDetail -> orderDetail.getOrder().getEmail()
+        ).distinct().toList();
+    }
+
     public void updateStatus(SetStateRequest setStateRequest) {
         List<OrderDetail> orderDetails = adminOrderManageRepository.findByOrder_Id(setStateRequest.getOrderId());
         orderDetails.forEach(
@@ -52,6 +59,8 @@ public class AdminOrderManageService {
         );
     }
 
+
+
     private OrderResponse toOrderResponse(OrderDetail orderDetail, Map<Long, List<ProductExtendedInfo>> productMap) {
         Order order = orderDetail.getOrder();
         return OrderResponse.builder()
@@ -61,8 +70,6 @@ public class AdminOrderManageService {
             .status(order.getStatus())
             .totalPrice(order.getTotalPrice())
             .orderId(order.getId())
-            .quantity(orderDetail.getQuantity())
-            .price(orderDetail.getPrice())
             .products(productMap.get(order.getId()))
             .build();
     }
