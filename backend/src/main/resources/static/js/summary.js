@@ -65,6 +65,11 @@ document.querySelector('.btn-dark').addEventListener('click', function (event) {
         price: item.price  // 단가
     }));
 
+    if (!products || products.length === 0) {
+        alert('장바구니에 상품을 추가하세요');
+        return;
+    }
+
     // 총액 계산
     const totalAmount = products.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
