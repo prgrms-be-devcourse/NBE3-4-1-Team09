@@ -1,6 +1,6 @@
 package com.nbe3.cafemanagement.service;
 
-import com.nbe3.cafemanagement.domain.Order;
+import com.nbe3.cafemanagement.domain.CustomerOrder;
 import com.nbe3.cafemanagement.domain.OrderDetail;
 import com.nbe3.cafemanagement.domain.Product;
 import com.nbe3.cafemanagement.repository.MainRepository;
@@ -10,9 +10,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class OrderDetailService {
@@ -20,7 +17,7 @@ public class OrderDetailService {
     private final OrderDetailRepository orderDetailRepository;
     private final MainRepository mainRepository;
 
-    public void save(Order order, String products) {
+    public void save(CustomerOrder customerOrder, String products) {
         JSONArray jsonArray = new JSONArray(products);
 
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -32,7 +29,7 @@ public class OrderDetailService {
             int price = Integer.parseInt(jsonObject.get("price").toString());
 
             OrderDetail orderDetail = OrderDetail.builder()
-                    .order(order)
+                    .customerOrder(customerOrder)
                     .product(product)
                     .quantity(quantity)
                     .price(quantity * price)
@@ -40,9 +37,5 @@ public class OrderDetailService {
 
             orderDetailRepository.save(orderDetail);
         }
-    }
-
-    public List<OrderDetail> findByOrderId(Long id) {
-        return orderDetailRepository.findByOrderId(id);
     }
 }

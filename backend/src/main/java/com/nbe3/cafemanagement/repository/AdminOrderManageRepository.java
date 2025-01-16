@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface AdminOrderManageRepository extends JpaRepository<OrderDetail, BigInteger> {
     @Query("SELECT od FROM OrderDetail od\n" +
-        "JOIN fetch od.order o\n" +
+        "JOIN fetch od.customerOrder o\n" +
         "JOIN fetch od.product p\n" +
         "where o.email like %:userEmail% and\n" +
         "p.name like %:searchParam%")
@@ -24,9 +24,9 @@ public interface AdminOrderManageRepository extends JpaRepository<OrderDetail, B
 
     @NonNull
     @Query("SELECT od FROM OrderDetail od\n" +
-        "JOIN fetch od.order o\n" +
+        "JOIN fetch od.customerOrder o\n" +
         "JOIN fetch od.product p\n")
     List<OrderDetail> findAll();
 
-    List<OrderDetail> findByOrder_Id(Long orderId);
+    List<OrderDetail> findByCustomerOrder_Id(Long orderId);
 }

@@ -1,9 +1,8 @@
 package com.nbe3.cafemanagement.service;
 
-import com.nbe3.cafemanagement.domain.Order;
+import com.nbe3.cafemanagement.domain.CustomerOrder;
 import com.nbe3.cafemanagement.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,19 +15,23 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    public Order save(String email, String address, String postcode, int totalAmount) {
-        Order order = Order.builder()
+    public CustomerOrder save(String email, String address, String postcode, int totalAmount) {
+        CustomerOrder customerOrder = CustomerOrder.builder()
                 .email(email)
                 .address(address + "|" + postcode)
                 .totalPrice(totalAmount)
                 .orderDate(LocalDate.now())
-                .status(Order.OrderStatus.PREPARING)
+                .status(CustomerOrder.OrderStatus.PREPARING)
                 .build();
         
-        return orderRepository.save(order);
+        return orderRepository.save(customerOrder);
     }
 
-    public List<Order> findByEmailOrderByOrderDate(String email) {
-        return orderRepository.findByEmailOrderByOrderDate(email);
+    public List<CustomerOrder> findAll() {
+        return orderRepository.findAll();
+    }
+
+    public Optional<CustomerOrder> findById(long id) {
+        return orderRepository.findById(id);
     }
 }
