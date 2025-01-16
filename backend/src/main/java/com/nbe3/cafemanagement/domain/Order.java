@@ -47,9 +47,9 @@ public class Order {
     @Getter
     @AllArgsConstructor
     public enum OrderStatus {
-        READY("배송준비중"),
-        DELIVERY("배송중"),
-        COMPLETED("배송완료");
+        PREPARING("배송준비중"),
+        SHIPPING("배송중"),
+        DELIVERED("배송완료");
 
         private final String status;
 

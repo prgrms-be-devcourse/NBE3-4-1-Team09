@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/order")
 @RequiredArgsConstructor
@@ -25,15 +28,16 @@ public class OrderController {
     public String payment(
             @Valid OrderDto orderDto,
             BindingResult bindingResult,
-            @RequestParam(name = "totalPrice", defaultValue = "0") int totalPrice,
-            @RequestParam(name = "summary", defaultValue = "") String summary
+            @RequestParam(name = "totalAmount", defaultValue = "0") int totalAmount,
+            @RequestParam(name = "products", defaultValue = "") String products
                           ) {
+
         if (bindingResult.hasErrors()) {
             return "main";
         }
 
-        Order order = orderService.save(orderDto.getEmail(), orderDto.getAddress(), orderDto.getPostcode(), totalPrice);
-        OrderDetail orderDetail = orderDetailService.save();
+        Order order = orderService.save(orderDto.getEmail(), orderDto.getAddress(), orderDto.getPostcode(), totalAmount);
+        orderDetailService.save(order, products);
 
         return "redirect:/master/checkProduct";
     }
