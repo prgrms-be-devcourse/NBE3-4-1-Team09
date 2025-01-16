@@ -18,13 +18,24 @@
 </div>
 
 <div class="card p-4 mt-4">
-    <form>
+    <div>
+        <button class="btn btn-secondary" onclick="window.location.href = '/admin/main'">뒤로 가기</button>
+    </div>
+    <form class="mt-2">
         <div class="mb-3">
             <label for="emailSelect" class="form-label"><b>주문자 이메일 선택</b></label>
-            <select id="emailSelect" class="form-select" onchange="selectEmail()">
+            <select id="emailSelect" class="form-select" onchange="selectEmail(this)">
                 <!-- 이메일 목록을 데이터베이스에서 가져와 표시 -->
-                <option th:each="email : ${emails}" th:value="${email}" th:text="${email}">email@example.com</option>
+                <option value="">전체</option>
+                <option th:each="user : ${users}" th:value="${user}" th:text="${user}"></option>
             </select>
+        </div>
+    </form>
+    <form>
+        <div class="mb-3">
+            <label for="emailSelect" class="form-label"><b>주문자 이메일 검색</b></label>
+            <input type="text" class="form-control" th:value="${param.userEmail}" name="userEmail"/>
+            <input class='btn btn-primary mt-2' type="submit"/>
         </div>
     </form>
 
@@ -33,17 +44,40 @@
         <table class="table table-bordered mt-2">
             <thead>
             <tr>
-                <th>상품명</th>
-                <th>수량</th>
-                <th>가격</th>
+                <th>이메일</th>
+                <th>주소</th>
+                <th>주문일</th>
+                <th>결제금액</th>
+                <th>주문상품</th>
+                <th>배송상태</th>
             </tr>
             </thead>
             <tbody id="orderTableBody">
             <!-- 주문 내역을 선택된 이메일에 따라 동적으로 표시 -->
-            <tr th:each="order : ${orders}">
-                <td th:text="${order.productName}">상품명</td>
-                <td th:text="${order.quantity}">1</td>
-                <td th:text="${order.price}">5000원</td>
+            <tr th:each="order : ${orderList}">
+                <td th:text="${order.email}"></td>
+                <td th:text="${order.address}"></td>
+                <td th:text="${order.orderDate}"></td>
+                <td th:text="${order.totalPrice}"></td>
+                <td>
+                    <ul>
+                        <li th:each="product : ${order.products}">
+                            <span th:text="${product.quantity} + 개"></span>
+                            <span th:text="${product.product.name}"></span>
+                        </li>
+                    </ul>
+                </td>
+                <td>
+                    <form>
+                        <label>
+                            <select th:attr="data-orderId=${order.orderId}" onchange="updateStatus(this)">
+                                <option th:selected="${order.status.name() == 'PREPARING'}" value="PREPARING">배송준비</option>
+                                <option th:selected="${order.status.name() == 'SHIPPING'}" value="SHIPPING">배송중</option>
+                                <option th:selected="${order.status.name() == 'DELIVERED'}" value="DELIVERED">배송완료</option>
+                            </select>
+                        </label>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -51,9 +85,54 @@
 </div>
 
 <script>
+    function selectEmail(element) {
+        if (element.value !== "") {
+            window.location = "/admin/order?userEmail=" + element.value
+        } else {
+            window.location = "/admin/order"
+        }
+    }
 
+    function updateStatus(element) {
 
+        if (!confirm("배송 상태를 "+element.value+"로 바꾸시겠습니까?")) {
+            return
+        }
+        const data = {
+            orderId: element.dataset.orderid,
+            status: element.value
+        }
 
+        console.log(data)
+
+        fetch("/admin/editStatus", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        }).then(
+            res=>alert("성공했습니다")
+        )
+    }
+</script>
+<script>
+    function selectOptionByParameter() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedValue = urlParams.get('userEmail');
+
+        if (selectedValue) {
+            Array.from(window.document.getElementsByTagName("option")).forEach(
+                element=>{
+                    if (element.value === selectedValue) {
+                        element.selected = true
+                    }
+                }
+            )
+        }
+    }
+
+    window.onload = selectOptionByParameter; // 페이지 로드 후 실행
 </script>
 
 </body>
