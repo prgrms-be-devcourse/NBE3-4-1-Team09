@@ -30,6 +30,6 @@ public class OrderResponse {
     private int price;
 
     //Product 엔티티 속성
-    private List<Product> products;
+    private List<ProductExtendedInfo> products;
 
 }

@@ -1,7 +1,7 @@
 package com.nbe3.cafemanagement.controller;
 
 import com.nbe3.cafemanagement.domain.Product;
-import com.nbe3.cafemanagement.domain.form.PaymentForm;
+import com.nbe3.cafemanagement.dto.OrderDto;
 import com.nbe3.cafemanagement.service.MainService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
