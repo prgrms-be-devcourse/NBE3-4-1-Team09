@@ -16,7 +16,10 @@
 </head>
 <body class="container-fluid">
 <div class="row justify-content-center m-4">
-  <h1 class="text-center">Grids & Circle</h1>
+  <div class="col-auto d-flex align-items-center">
+    <h1 class="text-center">Grids & Circle</h1>
+    <a href="/admin/login" class="btn btn-dark btn-sm ms-3">관리자 페이지로 이동</a>
+  </div>
 </div>
 <div class="card">
   <div class="row">
@@ -76,7 +79,7 @@
           <h5 class="col">총금액</h5>
           <h5 class="col text-end" id="total-price">0원</h5>
         </div>
-        <button type="submit" class="btn btn-dark col-12">결제하기</button>
+        <button type="submit" class="btn btn-dark col-12 payment">결제하기</button>
       </form>
 
     </div>

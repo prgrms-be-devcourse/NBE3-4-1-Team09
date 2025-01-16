@@ -43,7 +43,7 @@ function updateSummary() {
 }
 
 //  order 및 orderDetail에 날릴 파라미터들
-document.querySelector('.btn-dark').addEventListener('click', function (event) {
+document.querySelector('.btn-dark.payment').addEventListener('click', function (event) {
     event.preventDefault();  // 페이지 새로고침 방지
 
     // 사용자 입력값 가져오기
