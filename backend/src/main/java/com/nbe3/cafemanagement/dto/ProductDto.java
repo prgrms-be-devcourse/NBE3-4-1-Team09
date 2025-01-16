@@ -18,4 +18,7 @@ public class ProductDto {
 
     @Size(max = 750, message = "Description must be less than 750 characters")
     private String description;
+
+    @Size(max = 1024, message = "Description must be less than 1024 characters")
+    private String imageUrl;
 }
