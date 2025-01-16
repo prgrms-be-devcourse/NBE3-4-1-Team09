@@ -39,6 +39,7 @@
                 <th>수량</th>
                 <th>가격</th>
                 <th>주문날짜</th>
+                <th>배송상태</th>
             </tr>
             </thead>
             <tbody id="orderTableBody" th:each="order : ${orders}">
@@ -47,6 +48,7 @@
                     <td th:text="${detail.quantity}">수량</td>
                     <td th:text="${detail.price}">가격</td>
                     <td th:text="${order.orderDate}">주문날짜</td>
+                    <td th:text="${order.status}">배송상태</td>
                 </tr>
             </tbody>
         </table>
