@@ -39,6 +39,7 @@ public class Order {
     @Column(nullable = false)
     private int totalPrice;
 
+    @Column(name = "created_at", nullable = false, updatable = false)
     @CreatedDate
     @Setter(AccessLevel.PRIVATE)
     private LocalDateTime createAt;
