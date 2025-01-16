@@ -1,5 +1,6 @@
 package com.nbe3.cafemanagement.controller;
 
+import com.nbe3.cafemanagement.domain.Product;
 import com.nbe3.cafemanagement.dto.ProductDto;
 import com.nbe3.cafemanagement.service.AdminProductService;
 import jakarta.validation.Valid;
@@ -9,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/product")
@@ -16,8 +19,10 @@ public class AdminProductController {
 
     private final AdminProductService adminProductService;
 
-    @GetMapping("/main")
-    public String productMain() {
+    @GetMapping("")
+    public String productMain(Model model) {
+        List<Product> products = adminProductService.getAllProducts();
+        model.addAttribute("products", products);
         return "admin/product/main";
     }
 
@@ -39,10 +44,10 @@ public class AdminProductController {
             return "admin/product/new";
         }
         adminProductService.create(product);
-        return "redirect:/admin/product/main";
+        return "redirect:/admin/product";
     }
 
-    @PutMapping("/edit/{id}")
+    @PostMapping("/edit/{id}")
     public String editProduct(@Valid @ModelAttribute("product") ProductDto product,
                               BindingResult bindingResult,
                               Model model,
@@ -51,13 +56,13 @@ public class AdminProductController {
             return "admin/product/edit";
         }
         adminProductService.update(product, id);
-        return "redirect:/admin/product/main";
+        return "redirect:/admin/product";
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteProduct(@PathVariable long id) {
         adminProductService.deleteProduct(id);
-        return "redirect:/admin/product/main";
+        return "redirect:/admin/product";
     }
 }
 

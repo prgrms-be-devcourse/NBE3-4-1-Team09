@@ -20,6 +20,10 @@
       <input type="number" id="price" th:field="*{price}"/>
       <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" style="color: red;"></div><br/><br/>
 
+      <label for="imageUrl">Image URL:</label>
+      <input type="text" id="imageUrl" th:field="*{imageUrl}"/>
+      <div th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}" style="color: red;"></div><br/><br/>
+
       <button type="submit">Submit</button>
   </form>
 
