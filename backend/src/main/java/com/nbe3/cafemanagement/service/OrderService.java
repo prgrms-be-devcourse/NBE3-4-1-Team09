@@ -28,14 +28,6 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    public List<Order> findAll() {
-        return orderRepository.findAll();
-    }
-
-    public Optional<Order> findById(long id) {
-        return orderRepository.findById(id);
-    }
-
     public List<Order> findByEmailOrderByOrderDate(String email) {
         return orderRepository.findByEmailOrderByOrderDate(email);
     }
