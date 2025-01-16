@@ -8,7 +8,7 @@
 <h1>커피메뉴 수정</h1>
 
 <form th:object="${product}" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+<!--    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
 
     <label for="name">Name:</label>
     <input type="text" id="name" th:field="*{name}"/>
