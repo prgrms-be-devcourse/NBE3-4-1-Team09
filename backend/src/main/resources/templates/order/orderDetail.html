@@ -1,20 +1,62 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 내역 조회</title>
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
 
-  <!-- Custom CSS -->
-  <link href="/css/styles.css" rel="stylesheet">
-
-  <title>상품 목록</title>
+    <!-- Custom CSS -->
+    <link href="/css/admin_order.css" rel="stylesheet">
 </head>
 <body class="container-fluid">
-  <div>여기</div>
+<div class="row justify-content-center mt-5">
+    <h1 class="text-center">주문 내역 조회</h1>
+</div>
+
+<div class="card p-4 mt-4">
+    <form action="/orderDetail" method="POST" th:object="${orderDetailDto}">
+        <div class="mb-3">
+            <div class="mb-2" style="display:flex; justify-content:space-between; align-items:center;">
+                <label for="email" class="form-label"><b>주문자 이메일</b></label>
+                <button type="button" class="btn btn-primary col-2" onclick="location.href='/';">홈</button>
+            </div>
+            <input type="email" class="form-control" th:field="*{email}"/>
+            <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            <button type="submit" class="btn btn-dark col-12 mt-1">조회</button>
+        </div>
+    </form>
+
+    <div id="orderDetails" class="mt-4" th:if="${!#lists.isEmpty(orders)}">
+        <h5>주문 내역</h5>
+        <table class="table table-bordered mt-2">
+            <thead>
+            <tr>
+                <th>상품명</th>
+                <th>수량</th>
+                <th>가격</th>
+                <th>주문날짜</th>
+            </tr>
+            </thead>
+            <tbody id="orderTableBody" th:each="order : ${orders}">
+                <tr th:each="detail : ${orderDetails}" th:if="${detail.order.id == order.id}">
+                    <td th:text="${detail.product.name}">상품명</td>
+                    <td th:text="${detail.quantity}">수량</td>
+                    <td th:text="${detail.price}">가격</td>
+                    <td th:text="${order.orderDate}">주문날짜</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+
+</script>
+
 </body>
 </html>

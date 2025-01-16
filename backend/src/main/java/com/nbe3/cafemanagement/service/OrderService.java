@@ -35,4 +35,8 @@ public class OrderService {
     public Optional<Order> findById(long id) {
         return orderRepository.findById(id);
     }
+
+    public List<Order> findByEmailOrderByOrderDate(String email) {
+        return orderRepository.findByEmailOrderByOrderDate(email);
+    }
 }

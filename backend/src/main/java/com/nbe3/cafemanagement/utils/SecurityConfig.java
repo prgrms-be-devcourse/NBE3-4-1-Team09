@@ -21,7 +21,8 @@ public class SecurityConfig {
                                 "/css/**",
                                 "/js/**",
                                 "/master/checkProduct",
-                                "/order/payment").permitAll()  // 인증 없이 접근 허용
+                                "/order/payment",
+                                "/orderDetail").permitAll()  // 인증 없이 접근 허용
                         .requestMatchers("/admin/**").authenticated()  // /admin/** 경로는 인증 필요
                 )
                 .formLogin(form -> form
@@ -36,7 +37,7 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/admin/login")
                         .permitAll()
                 )
-                // .csrf(csrf -> csrf.disable())
+                 .csrf(csrf -> csrf.disable())
                 ;
         return http.build();
     }

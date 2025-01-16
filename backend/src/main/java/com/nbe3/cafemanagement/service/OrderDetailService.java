@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,5 +40,9 @@ public class OrderDetailService {
 
             orderDetailRepository.save(orderDetail);
         }
+    }
+
+    public List<OrderDetail> findByOrderId(Long id) {
+        return orderDetailRepository.findByOrderId(id);
     }
 }
