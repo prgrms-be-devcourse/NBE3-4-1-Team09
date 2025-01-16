@@ -1,15 +1,10 @@
 package com.nbe3.cafemanagement.dto;
 
-import com.nbe3.cafemanagement.domain.Order;
-import jakarta.persistence.*;
+import com.nbe3.cafemanagement.domain.CustomerOrder;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Setter
@@ -26,18 +21,18 @@ public class OrderDto {
 
     private LocalDate orderDate;
 
-    private Order.OrderStatus status;
+    private CustomerOrder.OrderStatus status;
 
     private int totalPrice;
 
     public OrderDto() {
 
     }
-    public OrderDto(Order order) {
-        this.email = order.getEmail();
-        this.address = order.getAddress();
-        this.orderDate = order.getOrderDate();
-        this.status = order.getStatus();
-        this.totalPrice = order.getTotalPrice();
+    public OrderDto(CustomerOrder customerOrder) {
+        this.email = customerOrder.getEmail();
+        this.address = customerOrder.getAddress();
+        this.orderDate = customerOrder.getOrderDate();
+        this.status = customerOrder.getStatus();
+        this.totalPrice = customerOrder.getTotalPrice();
     }
 }

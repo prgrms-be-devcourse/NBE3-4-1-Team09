@@ -17,7 +17,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 
 @SpringBootTest
 @AutoConfigureMockMvc // MockMvc 빈 등록
-public class AdminOrderManageControllerTest {
+public class AdminCustomerOrderManageControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
