@@ -22,7 +22,7 @@ public class OrderService {
                 .address(address + "|" + postcode)
                 .totalPrice(totalAmount)
                 .orderDate(LocalDate.now())
-                .status(Order.OrderStatus.READY)
+                .status(Order.OrderStatus.PREPARING)
                 .build();
         
         return orderRepository.save(order);
