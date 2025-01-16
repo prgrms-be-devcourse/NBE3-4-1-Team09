@@ -22,7 +22,7 @@ public class OrderService {
                 .address(address + "|" + postcode)
                 .totalPrice(totalAmount)
                 .orderDate(LocalDate.now())
-                .status(Order.OrderStatus.READY)
+                .status(Order.OrderStatus.PREPARING)
                 .build();
         
         return orderRepository.save(order);
@@ -34,5 +34,9 @@ public class OrderService {
 
     public Optional<Order> findById(long id) {
         return orderRepository.findById(id);
+    }
+
+    public List<Order> findByEmailOrderByOrderDate(String email) {
+        return orderRepository.findByEmailOrderByOrderDate(email);
     }
 }
