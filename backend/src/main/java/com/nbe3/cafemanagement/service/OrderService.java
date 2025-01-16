@@ -16,15 +16,27 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    public Order save(String email, String address, String postcode, int totalPrice) {
+    public Order save(String email, String address, String postcode, int totalAmount) {
         Order order = Order.builder()
                 .email(email)
                 .address(address + "|" + postcode)
-                .totalPrice(totalPrice)
+                .totalPrice(totalAmount)
                 .orderDate(LocalDate.now())
                 .status(Order.OrderStatus.PREPARING)
                 .build();
         
         return orderRepository.save(order);
+    }
+
+    public List<Order> findAll() {
+        return orderRepository.findAll();
+    }
+
+    public Optional<Order> findById(long id) {
+        return orderRepository.findById(id);
+    }
+
+    public List<Order> findByEmailOrderByOrderDate(String email) {
+        return orderRepository.findByEmailOrderByOrderDate(email);
     }
 }
