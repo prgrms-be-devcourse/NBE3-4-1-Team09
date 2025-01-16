@@ -18,6 +18,8 @@ public class SecurityConfig {
                                 "/",
                                 "/admin/login",
                                 "/admin/register",
+                                "/admin/order",
+                                "/admin/editStatus",
                                 "/css/**",
                                 "/js/**",
                                 "/master/checkProduct",
@@ -36,7 +38,7 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/admin/login")
                         .permitAll()
                 )
-                // .csrf(csrf -> csrf.disable())
+                 .csrf(csrf -> csrf.disable())
                 ;
         return http.build();
     }

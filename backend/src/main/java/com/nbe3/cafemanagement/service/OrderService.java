@@ -7,6 +7,8 @@ import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +22,7 @@ public class OrderService {
                 .address(address + "|" + postcode)
                 .totalPrice(totalPrice)
                 .orderDate(LocalDate.now())
-                .status(Order.OrderStatus.READY)
+                .status(Order.OrderStatus.PREPARING)
                 .build();
         
         return orderRepository.save(order);
