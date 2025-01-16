@@ -27,7 +27,7 @@ public class AdminOrderManageService {
             orderDetail -> {
                 List<Product> list = productMap.computeIfAbsent(orderDetail.getOrder().getId(), it->new ArrayList<>());
                 list.add(orderDetail.getProduct());
-                if (list.size() == 1) return null;
+                if (list.size() != 1) return null;
                 return toOrderResponse(orderDetail,productMap);
             }
         ).toList();
