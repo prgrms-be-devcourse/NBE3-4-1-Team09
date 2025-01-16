@@ -3,15 +3,22 @@ package com.nbe3.cafemanagement.controller;
 
 
 import com.nbe3.cafemanagement.dto.AdminDto;
+import com.nbe3.cafemanagement.dto.OrderRequest;
+import com.nbe3.cafemanagement.dto.OrderResponse;
+import com.nbe3.cafemanagement.service.AdminOrderManageService;
 import com.nbe3.cafemanagement.service.AdminService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.List;
 
 
 @Controller
@@ -20,7 +27,8 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
-
+    @Autowired
+    private AdminOrderManageService adminOrderManageService;
 
     // 관리자 로그인 화면
     @GetMapping("/login")
@@ -51,8 +59,6 @@ public class AdminController {
         }
     }
 
-
-
     // 관리자 메인 페이지
     @GetMapping("/main")
     public String adminMainPage(Model model, Principal principal) {
@@ -63,8 +69,13 @@ public class AdminController {
 
     // 주문 관리 페이지
     @GetMapping("/order")
-    public String adminOrderPage() {
-        return "admin/admin_order";  // admin 폴더 내 admin_order.html 반환
+    public String orderListPage(Model model,
+                            @Valid @ModelAttribute OrderRequest orderRequest) {
+        Page<OrderResponse> list = adminOrderManageService.getList(orderRequest);
+        List<String> users = adminOrderManageService.getAllUsers();
+        model.addAttribute("orderList", list);
+        model.addAttribute("users", users);
+        return "admin/admin_order";
     }
 
 }

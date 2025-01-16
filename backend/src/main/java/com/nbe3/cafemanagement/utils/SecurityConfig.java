@@ -18,6 +18,8 @@ public class SecurityConfig {
                                 "/",
                                 "/admin/login",
                                 "/admin/register",
+                                "/admin/order",
+                                "/admin/editStatus",
                                 "/css/**",
                                 "/js/**",
                                 "/master/checkProduct",

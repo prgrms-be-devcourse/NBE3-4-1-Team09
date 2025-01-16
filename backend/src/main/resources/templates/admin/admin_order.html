@@ -21,13 +21,13 @@
     <form>
         <div class="mb-3">
             <label for="emailSelect" class="form-label"><b>주문자 이메일 선택</b></label>
-            <select id="emailSelect" class="form-select" onchange="selectEmail()">
+            <select id="emailSelect" class="form-select" onchange="selectEmail(this)">
                 <!-- 이메일 목록을 데이터베이스에서 가져와 표시 -->
-                <option th:each="email : ${emails}" th:value="${email}" th:text="${email}">email@example.com</option>
+                <option value="">전체</option>
+                <option th:each="user : ${users}" th:value="${user}" th:text="${user}"></option>
             </select>
         </div>
     </form>
-
     <div id="orderDetails" class="mt-4">
         <h5>주문 내역</h5>
         <table class="table table-bordered mt-2">
@@ -40,10 +40,21 @@
             </thead>
             <tbody id="orderTableBody">
             <!-- 주문 내역을 선택된 이메일에 따라 동적으로 표시 -->
-            <tr th:each="order : ${orders}">
-                <td th:text="${order.productName}">상품명</td>
-                <td th:text="${order.quantity}">1</td>
-                <td th:text="${order.price}">5000원</td>
+            <tr th:each="order : ${orderList}">
+                <td th:text="${order.email}"></td>
+                <td th:text="${order.status}"></td>
+                <td th:text="${order.totalPrice}"></td>
+                <td>
+                    <form th:attr="data-orderId=${order.orderId}" onchange="updateStatus(this)">
+                        <label>
+                            <select>
+                                <option value="PREPARING">준비</option>
+                                <option value="SHIPPING">배송중</option>
+                                <option value="DELIVERED">배송완료</option>
+                            </select>
+                        </label>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -51,9 +62,45 @@
 </div>
 
 <script>
+    function selectEmail(element) {
+        if (element.value !== "") {
+            window.location = "/admin/order?userEmail=" + element.value
+        } else {
+            window.location = "/admin/order"
+        }
+    }
 
+    function updateStatus(element) {
+        const data = {
+            orderId:element.dataset.orderId,
+            status:element.value
+        }
+        fetch("admin/editStatus", {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json' // 또는 다른 Content-Type
+            },
+            body: JSON.stringify(data)
+        })
+    }
+</script>
+<script>
+    function selectOptionByParameter() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedValue = urlParams.get('userEmail');
 
+        if (selectedValue) {
+            Array.from(window.document.getElementsByTagName("option")).forEach(
+                element=>{
+                    if (element.value === selectedValue) {
+                        element.selected = true
+                    }
+                }
+            )
+        }
+    }
 
+    window.onload = selectOptionByParameter; // 페이지 로드 후 실행
 </script>
 
 </body>
