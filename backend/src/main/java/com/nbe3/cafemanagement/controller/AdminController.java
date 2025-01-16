@@ -78,9 +78,4 @@ public class AdminController {
         return "admin/admin_order";
     }
 
-    // 상품 관리 페이지
-    @GetMapping("/product")
-    public String adminProductPage() {
-        return "admin/admin_product";  // admin 폴더 내 admin_product.html 반환
-    }
 }

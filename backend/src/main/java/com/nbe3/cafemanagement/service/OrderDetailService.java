@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class OrderDetailService {
@@ -17,7 +19,7 @@ public class OrderDetailService {
     private final OrderDetailRepository orderDetailRepository;
     private final MainRepository mainRepository;
 
-    public void save(CustomerOrder customerOrder, String products) {
+    public void save(CustomerOrder order, String products) {
         JSONArray jsonArray = new JSONArray(products);
 
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -29,7 +31,7 @@ public class OrderDetailService {
             int price = Integer.parseInt(jsonObject.get("price").toString());
 
             OrderDetail orderDetail = OrderDetail.builder()
-                    .customerOrder(customerOrder)
+                    .customerOrder(order)
                     .product(product)
                     .quantity(quantity)
                     .price(quantity * price)
@@ -37,5 +39,9 @@ public class OrderDetailService {
 
             orderDetailRepository.save(orderDetail);
         }
+    }
+
+    public List<OrderDetail> findByCustomerOrderId(Long id) {
+        return orderDetailRepository.findByCustomerOrderId(id);
     }
 }

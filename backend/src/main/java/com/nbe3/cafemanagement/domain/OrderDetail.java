@@ -13,7 +13,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "OrderDetail")
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = IDENTITY)

@@ -31,8 +31,8 @@ public class OrderController {
             return "main";
         }
 
-        CustomerOrder customerOrder = orderService.save(orderDto.getEmail(), orderDto.getAddress(), orderDto.getPostcode(), totalAmount);
-        orderDetailService.save(customerOrder, products);
+        CustomerOrder order = orderService.save(orderDto.getEmail(), orderDto.getAddress(), orderDto.getPostcode(), totalAmount);
+        orderDetailService.save(order, products);
 
         return "redirect:/master/checkProduct";
     }

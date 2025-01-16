@@ -16,7 +16,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
 
     public CustomerOrder save(String email, String address, String postcode, int totalAmount) {
-        CustomerOrder customerOrder = CustomerOrder.builder()
+        CustomerOrder order = CustomerOrder.builder()
                 .email(email)
                 .address(address + "|" + postcode)
                 .totalPrice(totalAmount)
@@ -24,7 +24,7 @@ public class OrderService {
                 .status(CustomerOrder.OrderStatus.PREPARING)
                 .build();
         
-        return orderRepository.save(customerOrder);
+        return orderRepository.save(order);
     }
 
     public List<CustomerOrder> findAll() {
@@ -33,5 +33,9 @@ public class OrderService {
 
     public Optional<CustomerOrder> findById(long id) {
         return orderRepository.findById(id);
+    }
+
+    public List<CustomerOrder> findByEmailOrderByOrderDate(String email) {
+        return orderRepository.findByEmailOrderByOrderDate(email);
     }
 }

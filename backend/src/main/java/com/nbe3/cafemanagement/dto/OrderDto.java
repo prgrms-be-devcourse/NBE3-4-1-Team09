@@ -2,7 +2,8 @@ package com.nbe3.cafemanagement.dto;
 
 import com.nbe3.cafemanagement.domain.CustomerOrder;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
@@ -28,11 +29,11 @@ public class OrderDto {
     public OrderDto() {
 
     }
-    public OrderDto(CustomerOrder customerOrder) {
-        this.email = customerOrder.getEmail();
-        this.address = customerOrder.getAddress();
-        this.orderDate = customerOrder.getOrderDate();
-        this.status = customerOrder.getStatus();
-        this.totalPrice = customerOrder.getTotalPrice();
+    public OrderDto(CustomerOrder order) {
+        this.email = order.getEmail();
+        this.address = order.getAddress();
+        this.orderDate = order.getOrderDate();
+        this.status = order.getStatus();
+        this.totalPrice = order.getTotalPrice();
     }
 }

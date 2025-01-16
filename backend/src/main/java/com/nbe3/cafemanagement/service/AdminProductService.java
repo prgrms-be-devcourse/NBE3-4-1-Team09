@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AdminProductService {
@@ -24,6 +26,7 @@ public class AdminProductService {
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
+        product.setImageUrl(productDto.getImageUrl());
 
         adminProductRepository.save(product);
     }
@@ -38,6 +41,7 @@ public class AdminProductService {
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
+        product.setImageUrl(productDto.getImageUrl());
         adminProductRepository.save(product);
     }
 
@@ -50,6 +54,7 @@ public class AdminProductService {
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(product.getPrice())
+                .imageUrl(product.getImageUrl())
                 .build();
     }
 
@@ -58,5 +63,9 @@ public class AdminProductService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 상품 id 입니다, id=%d".formatted(id));
         }
         adminProductRepository.deleteById(id);
+    }
+
+    public List<Product> getAllProducts() {
+        return adminProductRepository.findAll();
     }
 }

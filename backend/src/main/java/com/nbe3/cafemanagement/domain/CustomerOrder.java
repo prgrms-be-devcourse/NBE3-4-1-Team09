@@ -17,7 +17,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "CustomerOrder")
 public class CustomerOrder {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -39,6 +38,7 @@ public class CustomerOrder {
     @Column(nullable = false)
     private int totalPrice;
 
+    @Column(name = "created_at", nullable = false, updatable = false)
     @CreatedDate
     @Setter(AccessLevel.PRIVATE)
     private LocalDateTime createAt;

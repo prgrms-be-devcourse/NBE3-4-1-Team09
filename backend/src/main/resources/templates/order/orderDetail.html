@@ -43,7 +43,7 @@
             </tr>
             </thead>
             <tbody id="orderTableBody" th:each="order : ${orders}">
-                <tr th:each="detail : ${orderDetails}" th:if="${detail.order.id == order.id}">
+                <tr th:each="detail : ${orderDetails}" th:if="${detail.customerOrder.id == order.id}">
                     <td th:text="${detail.product.name}">상품명</td>
                     <td th:text="${detail.quantity}">수량</td>
                     <td th:text="${detail.price}">가격</td>
