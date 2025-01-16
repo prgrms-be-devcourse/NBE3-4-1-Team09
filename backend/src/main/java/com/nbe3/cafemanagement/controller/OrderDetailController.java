@@ -1,6 +1,6 @@
 package com.nbe3.cafemanagement.controller;
 
-import com.nbe3.cafemanagement.domain.Order;
+import com.nbe3.cafemanagement.domain.CustomerOrder;
 import com.nbe3.cafemanagement.domain.OrderDetail;
 import com.nbe3.cafemanagement.dto.OrderDetailDto;
 import com.nbe3.cafemanagement.service.OrderDetailService;
@@ -41,11 +41,11 @@ public class OrderDetailController {
             return "order/orderDetail";
         }
 
-        List<Order> orders = orderService.findByEmailOrderByOrderDate(orderDetailDto.getEmail());
+        List<CustomerOrder> orders = orderService.findByEmailOrderByOrderDate(orderDetailDto.getEmail());
 
         List<OrderDetail> orderDetails = new ArrayList<>();
-        for (Order order : orders) {
-            orderDetails.addAll(orderDetailService.findByOrderId(order.getId()));
+        for (CustomerOrder order : orders) {
+            orderDetails.addAll(orderDetailService.findByCustomerOrderId(order.getId()));
         }
 
         System.out.println(orders);

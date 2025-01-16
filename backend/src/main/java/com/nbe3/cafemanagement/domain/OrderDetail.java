@@ -13,7 +13,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "OrderDetail")
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -21,7 +20,7 @@ public class OrderDetail {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Order order;
+    private CustomerOrder customerOrder;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
