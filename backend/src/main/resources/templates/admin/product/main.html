@@ -12,7 +12,12 @@
 </head>
 <body class="container mt-5">
 <h1 class="text-center mb-4">제품 관리 페이지</h1>
+<div>
+  <a th:href="@{|/admin/main|}" class="btn btn-primary btn-sm">관리자 홈</a>
+  <a th:href="@{|/master/checkProduct|}" class="btn btn-primary btn-sm">홈페이지</a>
+</div><br />
 <a th:href="@{|/admin/product/new|}" class="btn btn-primary btn-sm">제품 생성하기</a>
+
 <!-- 제품 목록 테이블 -->
 <table class="table table-bordered">
   <thead>
