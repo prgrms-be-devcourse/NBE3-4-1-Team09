@@ -54,7 +54,7 @@
             </thead>
             <tbody id="orderTableBody">
             <!-- 주문 내역을 선택된 이메일에 따라 동적으로 표시 -->
-            <tr th:each="order : ${orderList}">
+            <tr th:each="order, loop : ${orderList}">
                 <td th:text="${order.email}"></td>
                 <td th:text="${order.address}"></td>
                 <td th:text="${order.orderDate}"></td>
@@ -68,14 +68,15 @@
                     </ul>
                 </td>
                 <td>
-                    <form>
+                    <form th:attr="data-orderId=${order.orderId}" onsubmit="updateStatus(this)" class="update-state">
                         <label>
-                            <select th:attr="data-orderId=${order.orderId}" onchange="updateStatus(this)">
-                                <option th:selected="${order.status.name() == 'PREPARING'}" value="PREPARING">배송준비</option>
-                                <option th:selected="${order.status.name() == 'SHIPPING'}" value="SHIPPING">배송중</option>
-                                <option th:selected="${order.status.name() == 'DELIVERED'}" value="DELIVERED">배송완료</option>
+                            <select>
+                                <option th:selected="${order.status.name() == 'PREPARING'}" th:attr="disabled=${order.status.name() == 'PREPARING'} ? 'disabled' : null" value="PREPARING">배송준비</option>
+                                <option th:selected="${order.status.name() == 'SHIPPING'}"  th:attr="disabled=${order.status.name() == 'SHIPPING'} ? 'disabled' : null" value="SHIPPING">배송중</option>
+                                <option th:selected="${order.status.name() == 'DELIVERED'}" th:attr="disabled=${order.status.name() == 'DELIVERED'} ? 'disabled' : null" value="DELIVERED">배송완료</option>
                             </select>
                         </label>
+                        <input type="submit" value="수정"/>
                     </form>
                 </td>
             </tr>
@@ -93,14 +94,28 @@
         }
     }
 
-    function updateStatus(element) {
+    function updateStatus(e) {
+        const selectedStatus = e.querySelector('select').value;
+        let status = ""
+        switch (selectedStatus) {
+            case 'PREPARING':
+                status = "배송준비"
+                break; // break 문은 선택적이지만, 매우 중요합니다.
+            case 'SHIPPING':
+                status = "배송중"
+                break;
+            case 'DELIVERED':
+                status = "배송완료"
+                break;
+        }
 
-        if (!confirm("배송 상태를 "+element.value+"로 바꾸시겠습니까?")) {
+        if (!confirm("배송 상태를 '"+status+"' 로 바꾸시겠습니까?")) {
             return
         }
+
         const data = {
-            orderId: element.dataset.orderid,
-            status: element.value
+            orderId: e.dataset.orderid,
+            status: selectedStatus
         }
 
         console.log(data)
@@ -112,7 +127,15 @@
             },
             body: JSON.stringify(data)
         }).then(
-            res=>alert("성공했습니다")
+            res=> {
+                alert("성공했습니다")
+                window.location = "/admin/order"
+            }
+        ).catch(
+            err=> {
+                alert("예상치 못한 오류가 발생했습니다")
+                console.trace(err)
+            }
         )
     }
 </script>
@@ -131,8 +154,12 @@
             )
         }
     }
-
     window.onload = selectOptionByParameter; // 페이지 로드 후 실행
+    Array.from(document.getElementsByClassName("update-state")).forEach(
+        item=>{
+            item.addEventListener('submit', (event)=>{event.preventDefault()})
+        }
+    )
 </script>
 
 </body>
