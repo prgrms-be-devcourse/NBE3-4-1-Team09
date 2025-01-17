@@ -17,7 +17,8 @@ public interface AdminOrderManageRepository extends JpaRepository<OrderDetail, B
         "JOIN fetch od.customerOrder o\n" +
         "JOIN fetch od.product p\n" +
         "where o.email like %:userEmail% and\n" +
-        "p.name like %:searchParam%")
+        "p.name like %:searchParam%\n"+
+        "ORDER BY o.orderDate desc")
     List<OrderDetail> findAll(@Param("userEmail") String userEmail,
                               @Param("searchParam") String searchParam
                               );

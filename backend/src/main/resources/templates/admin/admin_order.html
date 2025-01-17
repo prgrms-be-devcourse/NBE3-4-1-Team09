@@ -129,12 +129,12 @@
         }).then(
             res=> {
                 alert("성공했습니다")
-                window.location = "/admin/order"
+                window.location.reload()
             }
         ).catch(
             err=> {
                 alert("예상치 못한 오류가 발생했습니다")
-                console.trace(err)
+                window.location.reload()
             }
         )
     }
