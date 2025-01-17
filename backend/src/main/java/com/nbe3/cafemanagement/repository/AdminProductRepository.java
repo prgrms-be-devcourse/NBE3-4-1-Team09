@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface AdminProductRepository extends JpaRepository<Product, Long> {
     boolean existsByName(String name);
+    List<Product> findByDeletedFalse();
 }

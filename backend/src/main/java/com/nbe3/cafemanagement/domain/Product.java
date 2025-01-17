@@ -1,6 +1,7 @@
 package com.nbe3.cafemanagement.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,9 +21,7 @@ public class Product {
 
     private String imageUrl;
 
-    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
-    private boolean delFlag = false;
+    private boolean inactive;
 
-    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
-    private boolean active_flag = false;
+    private boolean deleted;
 }

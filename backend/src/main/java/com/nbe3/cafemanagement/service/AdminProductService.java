@@ -1,11 +1,14 @@
 package com.nbe3.cafemanagement.service;
 
+import com.nbe3.cafemanagement.domain.OrderDetail;
 import com.nbe3.cafemanagement.domain.Product;
 import com.nbe3.cafemanagement.dto.ProductDto;
 import com.nbe3.cafemanagement.repository.AdminProductRepository;
+import com.nbe3.cafemanagement.repository.OrderDetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -15,12 +18,9 @@ import java.util.List;
 public class AdminProductService {
 
     private final AdminProductRepository adminProductRepository;
+    private final OrderDetailRepository orderDetailRepository;
 
     public void create(ProductDto productDto) {
-
-        if (adminProductRepository.existsByName(productDto.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "중복된 이름입니다.");
-        }
 
         Product product = new Product();
         product.setName(productDto.getName());
@@ -33,9 +33,6 @@ public class AdminProductService {
     }
 
     public void update(ProductDto productDto, long id) {
-        if (!adminProductRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 상품입니다.");
-        }
 
         Product product = new Product();
         product.setId(id);
@@ -59,15 +56,17 @@ public class AdminProductService {
                 .build();
     }
 
+    @Transactional
     public void deleteProduct(long id) {
-        if (!adminProductRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 상품 id 입니다, id=%d".formatted(id));
-        }
-        adminProductRepository.deleteById(id);
+        Product product = adminProductRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 상품 id 입니다, id=%d".formatted(id)));
+
+        product.setDeleted(true);
+        adminProductRepository.save(product);
     }
 
     public List<Product> getAllProducts() {
-        return adminProductRepository.findAll();
+        return adminProductRepository.findByDeletedFalse();
     }
 
     public void toggleActive(long id) {
