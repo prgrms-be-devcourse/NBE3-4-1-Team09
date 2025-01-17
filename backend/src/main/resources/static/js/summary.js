@@ -44,6 +44,14 @@ function updateSummary() {
     document.getElementById('total-price').textContent = `${totalPrice}원`;
 }
 
+// 이메일 형식 검증 함수
+function validateEmail(email) {
+    // 간단한 이메일 형식 정규식
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+
 // order 및 orderDetail에 날릴 파라미터들
 document.querySelector('.btn-dark.payment').addEventListener('click', function (event) {
     event.preventDefault(); // 페이지 새로고침 방지
@@ -52,6 +60,14 @@ document.querySelector('.btn-dark.payment').addEventListener('click', function (
     const emailInput = document.getElementById('email').value.trim();
     const addressInput = document.getElementById('address').value.trim();
     const postcodeInput = document.getElementById('postcode').value.trim();
+
+
+ // 이메일 형식 검증
+    if (!validateEmail(emailInput)) {
+        alert('올바른 이메일 형식을 입력해주세요.');
+        return; // 이메일 형식이 잘못된 경우 제출 중단
+    }
+
 
     if (!emailInput || !addressInput || !postcodeInput) {
         alert('모든 필드를 입력해주세요.');
