@@ -9,7 +9,7 @@
 <h1> 계정 생성 </h1>
 
 <!-- 회원가입 폼 -->
-<form th:action="@{/admin/register}" method="post">
+<form th:action="@{/src/main/resources/templates/admin/register}" method="post">
     <label for="username">Username:</label>
     <input type="text" id="username" name="username" required>
     <br>
@@ -21,6 +21,6 @@
 
 <p th:if="${registerMessage}" th:text="${registerMessage}" style="color: green;"></p>
 
-<a th:href="@{/admin/login}">로그인 페이지</a>
+<a th:href="@{/src/main/resources/templates/admin/login}">로그인 페이지</a>
 </body>
 </html>
