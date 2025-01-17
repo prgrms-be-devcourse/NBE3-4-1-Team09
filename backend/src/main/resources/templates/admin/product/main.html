@@ -29,6 +29,7 @@
     <th>사진</th>
     <th>수정</th>
     <th>삭제</th>
+    <th>현재 상태</th>
   </tr>
   </thead>
   <tbody>
@@ -52,6 +53,14 @@
       <!-- 삭제 버튼 -->
       <form th:object="${product}" method="post" th:action="@{/admin/product/delete/{id}(id=${product.id})}">
         <button class="btn btn-danger btn-sm">삭제</button>
+      </form>
+    </td>
+
+    <td>
+      <!-- 비활성화 버튼 -->
+      <form th:object="${product}" method="post" th:action="@{/admin/product/inactive/{id}(id=${product.id})}">
+        <button class="btn" th:classappend="${product.inactive ? 'btn-secondary' : 'btn-success'}"
+                th:text="${product.inactive ? '비활성' : '활성'}"></button>
       </form>
     </td>
   </tr>
