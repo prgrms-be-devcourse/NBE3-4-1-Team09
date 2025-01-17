@@ -17,8 +17,13 @@ public class MainService {
     }
 
     // 모든 상품 목록 조회
-    public List<Product> getAllProducts() {
+    //  2025-01-17 : 물리 삭제 >> 논리 삭제 변경
+/*    public List<Product> getAllProducts() {
         return mainRepository.findAll();
-    }
+    }*/
 
+    // 모든 상품 목록 조회
+    public List<Product> getNotDeletedProducts() {
+        return mainRepository.findByDelFlagFalse();
+    }
 }

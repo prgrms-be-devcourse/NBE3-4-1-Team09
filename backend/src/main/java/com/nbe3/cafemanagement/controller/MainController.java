@@ -24,7 +24,7 @@ public class MainController {
     @GetMapping("/checkProduct")
     public String checkProduct(Model model, OrderDto orderDto) {
 
-        List<Product> products = mainService.getAllProducts();
+        List<Product> products = mainService.getNotDeletedProducts();
 
         System.out.println("상품 목록: " + products);
 

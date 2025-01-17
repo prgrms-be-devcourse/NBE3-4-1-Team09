@@ -19,4 +19,7 @@ public class Product {
     private String description;
 
     private String imageUrl;
+
+    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
+    private boolean delFlag = false;
 }
