@@ -51,10 +51,10 @@ public class AdminController {
         boolean registerSuccess = adminService.register(adminDto);
 
         if (registerSuccess) {
-            model.addAttribute("registerMessage", "Registration successful! You can now log in.");
+            model.addAttribute("registerMessage", "생성성공l! You can now log in.");
             return "redirect:/admin/login";  // 성공 시 로그인 페이지로 리다이렉트
         } else {
-            model.addAttribute("registerMessage", "Registration failed. Username already exists.");
+            model.addAttribute("registerMessage", "생성실패. Username 이미 있음.");
             return "admin/admin_register";  // 실패 시 회원가입 페이지로 다시 이동
         }
     }
