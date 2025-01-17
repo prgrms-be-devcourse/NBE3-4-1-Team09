@@ -18,13 +18,13 @@
 </div>
 
 <div class="card p-4 mt-4">
-    <p> <span th:text="${username}"></span> You have successfully logged in.</p>
+    <p> <span th:text="${username}"></span> 님이 접속하셨습니다.</p>
 
     <nav>
         <ul class="list-group">
-            <li class="list-group-item"><a th:href="@{/src/main/resources/templates/admin/order}">주문 관리</a></li>
-            <li class="list-group-item"><a th:href="@{/src/main/resources/templates/admin/product}">상품 관리</a></li>
-            <li class="list-group-item"><a th:href="@{/src/main/resources/templates/admin/login}">로그아웃</a></li>
+            <li class="list-group-item"><a th:href="@{/admin/order}">주문 관리</a></li>
+            <li class="list-group-item"><a th:href="@{/admin/product}">상품 관리</a></li>
+            <li class="list-group-item"><a th:href="@{/admin/logout}">로그아웃</a></li>
         </ul>
     </nav>
 </div>
