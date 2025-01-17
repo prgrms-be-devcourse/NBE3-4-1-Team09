@@ -23,7 +23,7 @@
 </div>
 <div class="card">
   <div class="row">
-    <div class="col-md-8 mt-4 d-flex flex-column align-items-start p-3 pt-0">
+    <div class="col-md-8 mt-4 d-flex flex-column align-items-start p-3 pt-0 custom-width">
       <h5 class="flex-grow-0"><b>상품 목록</b></h5>
       <ul class="list-group products">
         <!-- Thymeleaf 반복문으로 상품 목록 출력 -->
@@ -31,18 +31,18 @@
           <div class="col-2">
             <img class="img-fluid" th:src="${product.imageUrl}" alt="상품 이미지">
           </div>
-          <div class="col">
+          <div class="col product-description">
             <!-- 상품 설명 -->
             <div class="row text-muted" th:text="${product.description}">설명</div>
             <!-- 상품명 -->
-            <div class="row" th:text="${product.name}">상품명</div>
+            <div class="row product-name" th:text="${product.name}">상품명</div>
           </div>
           <!-- 가격 -->
-          <div class="col text-center price" th:text="${product.price} + '원'">가격</div>
+          <div class="col price-column text-center" th:text="${product.price} + '원'">가격</div>
           <!-- 숨겨진 input으로 상품 ID 추가 -->
           <input type="hidden" th:value="${product.id}" class="product-id">
-          <div class="col text-end action">
-            <a class="btn btn-small btn-outline-dark" href="#" th:text="'추가'"></a>
+          <div class="col action-column text-end">
+            <a class="btn btn-small btn-outline-dark add-button" href="#" th:text="'추가'"></a>
           </div>
         </li>
       </ul>

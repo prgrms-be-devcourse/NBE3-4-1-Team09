@@ -26,6 +26,11 @@ body {
     }
 }
 
+.text-muted {
+ width : 70%;
+
+}
+
 .row {
     margin: 0;
 }
@@ -34,9 +39,85 @@ body {
     font-size: 1.5rem;
 }
 
-.col-2,
 .col {
     padding: 0 1vh;
+    flex: 1 1 auto;
+    width: 50%;
+}
+
+.product-description {
+    flex: 1 1 auto;
+    max-width: 45%;
+    padding: 0 1vh;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.price-column {
+    flex: 0 0 15%; /* 가격 컬럼 너비 */
+    max-width: 15%;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 15px; /* 원하는 만큼 내려줌 */
+}
+
+.action-column {
+    flex: 0 0 20%; /* 액션 컬럼 너비 */
+    max-width: 20%;
+    display: flex; /* 가로 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
+    justify-content: flex-end; /* 오른쪽 정렬 */
+}
+
+.add-button {
+    display: inline-block;
+    padding: 0.5rem 1.5rem; /* 버튼 크기 확대 */
+    font-size: 0.9rem; /* 버튼 텍스트 크기 */
+    text-align: center;
+    border: 1px solid #000;
+    border-radius: 0.25rem;
+    background-color: #fff;
+    text-decoration: none; /* 링크 밑줄 제거 */
+    margin-right: 0.5rem; /* 버튼과 텍스트 사이 간격 */
+    cursor: pointer;
+}
+
+.add-button:hover {
+    background-color: #f0f0f0; /* 호버 시 배경색 변경 */
+}
+
+
+
+.col-2,
+.col {
+    padding: 0 0vh;
+}
+
+.product-name {
+    flex: 1 1 auto; /* 유연한 크기 설정 */
+    max-width: 30%; /* 원하는 너비 비율 설정 */
+    padding: 0 0vh;
+    text-align: left; /* 텍스트를 왼쪽 정렬 */
+    font-weight: bold; /* 강조 표시 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    text-overflow: ellipsis; /* 텍스트가 넘칠 경우 '...' 표시 */
+}
+
+.col.text-center.price {
+    flex: 0 0 10%; /* 너비를 줄이기 위해 설정 */
+    max-width: 10%; /* 최대 너비를 설정 */
+    padding: 0 0.5vh; /* 여백을 조금 줄임 */
+    text-align: center; /* 기존의 text-center 유지 */
+}
+
+.col.text-end.action {
+    flex: 0 0 10%; /* 너비를 줄임 */
+    max-width: 10%; /* 최대 너비를 제한 */
+    padding: 0 0.5vh; /* 여백 최소화 */
+    text-align: end; /* 내용이 오른쪽에 정렬되도록 유지 */
 }
 
 img {
