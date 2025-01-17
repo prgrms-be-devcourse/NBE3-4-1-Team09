@@ -11,6 +11,9 @@
 
     <!-- Custom CSS -->
     <link href="/css/admin_order.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/ko.js"></script>
 </head>
 <body class="container-fluid">
 <div class="row justify-content-center mt-5">
@@ -32,9 +35,15 @@
         </div>
     </form>
     <form>
-        <div class="mb-3">
+        <div class="mb-3 justify-content-between">
             <label for="emailSelect" class="form-label"><b>주문자 이메일 검색</b></label>
             <input type="text" class="form-control" th:value="${param.userEmail}" name="userEmail"/>
+            <div class="mt-2">
+                <label for="emailSelect" class="form-label"><b>날짜 범위</b></label>
+                <input name="dayFrom" type="text" id="myDatepickerFrom"/>
+                <span> ~ </span>
+                <input name="dayUntil" type="text" id="myDatepickerUntil"/>
+            </div>
             <input class='btn btn-primary mt-2' type="submit"/>
         </div>
     </form>
@@ -161,6 +170,29 @@
         }
     )
 </script>
+<script>
+    const urlParams = new URLSearchParams(window.location.search).get('dayFrom');
+    const today = new Date();
+    let dayFrom = new Date();
+    try {
 
+    } catch {
+        dayFrom.setDate(today.getDate() - 7);
+    }
+
+    flatpickr('#myDatepickerFrom', {
+        "locale": "ko",
+        defaultDate: new Date(urlParams)
+    })
+
+    flatpickr('#myDatepickerFrom', {
+        "locale": "ko",
+        defaultDate: dayFrom
+    });
+    flatpickr('#myDatepickerUntil', {
+        "locale": "ko",  // locale for this instance only
+        defaultDate: today
+    });
+</script>
 </body>
 </html>

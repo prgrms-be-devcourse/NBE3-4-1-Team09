@@ -23,7 +23,12 @@ public class AdminOrderManageService {
         Pageable pageable = PageRequest.of(orderRequest.getPage()-1, orderRequest.getPageSize(), Sort.by(Sort.Direction.DESC, "order.orderDate"));
         Map<Long, List<ProductExtendedInfo>> productMap = new HashMap<>();
 
-        List<OrderResponse> orderResponses = adminOrderManageRepository.findAll(orderRequest.getUserEmail(), orderRequest.getSearchParam()).stream().map(
+        List<OrderResponse> orderResponses = adminOrderManageRepository.findAll(
+            orderRequest.getUserEmail(),
+            orderRequest.getSearchParam(),
+            orderRequest.getDayFrom(),
+            orderRequest.getDayUntil()
+        ).stream().map(
             orderDetail -> {
                 List<ProductExtendedInfo> list = productMap.computeIfAbsent(orderDetail.getCustomerOrder().getId(), it->new ArrayList<>());
                 ProductExtendedInfo productDto = new ProductExtendedInfo();
