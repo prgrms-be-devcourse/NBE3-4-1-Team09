@@ -28,6 +28,7 @@ public class AdminProductService {
         product.setPrice(productDto.getPrice());
         product.setImageUrl(productDto.getImageUrl());
 
+
         adminProductRepository.save(product);
     }
 
@@ -67,5 +68,13 @@ public class AdminProductService {
 
     public List<Product> getAllProducts() {
         return adminProductRepository.findAll();
+    }
+
+    public void toggleActive(long id) {
+        Product product = adminProductRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 상품 id 입니다, id=%d".formatted(id)));
+
+        product.setInactive(!product.isInactive());
+        adminProductRepository.save(product);
     }
 }

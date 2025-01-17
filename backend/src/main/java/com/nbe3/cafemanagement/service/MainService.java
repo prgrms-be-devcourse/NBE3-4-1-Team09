@@ -24,6 +24,6 @@ public class MainService {
 
     // 모든 상품 목록 조회
     public List<Product> getNotDeletedProducts() {
-        return mainRepository.findByDelFlagFalse();
+        return mainRepository.findByInactiveFalse();
     }
 }

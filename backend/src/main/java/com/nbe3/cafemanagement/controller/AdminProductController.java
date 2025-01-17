@@ -64,5 +64,11 @@ public class AdminProductController {
         adminProductService.deleteProduct(id);
         return "redirect:/admin/product";
     }
+
+    @PostMapping("/inactive/{id}")
+    public String toggleActive(@PathVariable long id) {
+        adminProductService.toggleActive(id);
+        return "redirect:/admin/product";
+    }
 }
 
