@@ -66,11 +66,12 @@
         </div>
         <div class="mb-3">
           <label for="address" class="form-label">주소</label>
-          <input type="text" class="form-control mb-1" id="address" name="address"> <!-- name 추가 -->
+          <input type="text" class="form-control mb-1" id="address" name="address" readonly> <!-- name 추가 -->
+          <button type="button" class="btn btn-secondary mt-1" id="search-address">주소 검색</button>
         </div>
         <div class="mb-3">
           <label for="postcode" class="form-label">우편번호</label>
-          <input type="text" class="form-control" id="postcode" name="postcode"> <!-- name 추가 -->
+          <input type="text" class="form-control" id="postcode" name="postcode" readonly> <!-- name 추가 -->
         </div>
 
         <div>당일 오후 2시 이후의 주문은 다음날 배송을 시작합니다.</div>
@@ -92,5 +93,8 @@
 
 <!-- 장바구니 기능 javascript -->
 <script src="/js/summary.js"></script>
+<!-- 주소검색 javascript -->
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="/js/kakao_address.js"></script>
 </body>
 </html>
