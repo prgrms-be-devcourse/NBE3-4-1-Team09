@@ -15,10 +15,10 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    public CustomerOrder save(String email, String address, String postcode, int totalAmount) {
+    public CustomerOrder save(String email, String address, String postcode, int totalAmount, String adressDetail) {
         CustomerOrder order = CustomerOrder.builder()
                 .email(email)
-                .address(address + "|" + postcode)
+                .address(address + " "+ adressDetail+"|" + postcode)
                 .totalPrice(totalAmount)
                 .orderDate(LocalDate.now())
                 .status(CustomerOrder.OrderStatus.PREPARING)

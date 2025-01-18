@@ -17,6 +17,9 @@ public class OrderDto {
     @NotEmpty(message = "주소를 입력하세요")
     private String address;
 
+    @NotEmpty(message = "상세 주소를 입력하세요")
+    private String addressDetail;
+
     @NotEmpty(message = "우편번호를 입력하세요")
     private String postcode;
 

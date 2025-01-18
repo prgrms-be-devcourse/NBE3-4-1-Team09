@@ -52,6 +52,7 @@ document.querySelector('.btn-dark.payment').addEventListener('click', function (
     const emailInput = document.getElementById('email').value.trim();
     const addressInput = document.getElementById('address').value.trim();
     const postcodeInput = document.getElementById('postcode').value.trim();
+    const addressDetailInput = document.getElementById('addressDetail').value.trim();
 
     if (!emailInput || !addressInput || !postcodeInput) {
         alert('모든 필드를 입력해주세요.');
