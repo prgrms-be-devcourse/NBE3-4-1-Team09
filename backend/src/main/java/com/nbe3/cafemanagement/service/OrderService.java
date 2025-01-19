@@ -35,7 +35,7 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
-    public List<CustomerOrder> findByEmailOrderByOrderDate(String email) {
-        return orderRepository.findByEmailOrderByOrderDate(email);
+    public List<CustomerOrder> findByEmailOrderByCreatedAtDesc(String email) {
+        return orderRepository.findByEmailOrderByCreatedAtDesc(email);
     }
 }

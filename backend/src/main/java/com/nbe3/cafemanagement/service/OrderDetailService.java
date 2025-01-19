@@ -8,6 +8,9 @@ import com.nbe3.cafemanagement.repository.OrderDetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,5 +46,18 @@ public class OrderDetailService {
 
     public List<OrderDetail> findByCustomerOrderId(Long id) {
         return orderDetailRepository.findByCustomerOrderId(id);
+    }
+
+    public Page<OrderDetail> pagination(List<OrderDetail> orderDetails, int page) {
+
+        int pageSize = 5;
+        int start = page * pageSize;
+        int end = Math.min(start + pageSize, orderDetails.size());
+
+        return new PageImpl<>(
+                orderDetails.subList(start, end),
+                Pageable.ofSize(pageSize).withPage(page),
+                orderDetails.size()
+        );
     }
 }

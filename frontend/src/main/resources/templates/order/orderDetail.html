@@ -43,15 +43,37 @@
             </tr>
             </thead>
             <tbody id="orderTableBody" th:each="order : ${orders}">
-                <tr th:each="detail : ${orderDetails}" th:if="${detail.customerOrder.id == order.id}">
-                    <td th:text="${detail.product.name}">상품명</td>
-                    <td th:text="${detail.quantity}">수량</td>
-                    <td th:text="${detail.price}">가격</td>
-                    <td th:text="${order.orderDate}">주문날짜</td>
-                    <td th:text="${order.status}">배송상태</td>
-                </tr>
+            <tr th:each="detail : ${orderDetails}" th:if="${detail.customerOrder.id == order.id}">
+                <td th:text="${detail.product.name}">상품명</td>
+                <td th:text="${detail.quantity}">수량</td>
+                <td th:text="${detail.price}">가격</td>
+                <td th:text="${order.orderDate}">주문날짜</td>
+                <td th:text="${order.status}">배송상태</td>
+            </tr>
             </tbody>
         </table>
+        <div>
+            <!-- 이전 페이지 링크 -->
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${!page.hasPrevious} ? 'disabled'">
+                    <a class="page-link" th:href="@{|/orderDetail?email=${email}&page=${page.number-1}|}">이전</a>
+                </li>
+
+                <!-- 페이지 번호 링크들 -->
+                <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                    class="page-item" th:classappend="${i == page.number} ? 'active' : ''">
+                    <a th:href="@{|/orderDetail?email=${email}&page=${i}|}"
+                       th:text="${i + 1}"
+                       class="page-link"></a>
+                </li>
+
+                <!-- 다음 페이지 링크 -->
+                <li class="page-item" th:classappend="${!page.hasNext} ? 'disabled'">
+                    <a class="page-link" th:href="@{|/orderDetail?email=${email}&page=${page.number+1}|}">다음</a>
+                </li>
+            </ul>
+        </div>
+
     </div>
 </div>
 
