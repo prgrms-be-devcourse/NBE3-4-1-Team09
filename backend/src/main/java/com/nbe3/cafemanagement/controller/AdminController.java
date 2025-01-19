@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -70,7 +71,12 @@ public class AdminController {
     // 주문 관리 페이지
     @GetMapping("/order")
     public String orderListPage(Model model,
-                            @Valid @ModelAttribute OrderRequest orderRequest) {
+                                @Valid @ModelAttribute OrderRequest orderRequest,
+                                BindingResult bindingResult) {
+        model.addAttribute("orderRequest", orderRequest);
+        if (bindingResult.hasErrors()) {
+            return "admin/admin_order";
+        }
         Page<OrderResponse> list = adminOrderManageService.getList(orderRequest);
         List<String> users = adminOrderManageService.getAllUsers();
         model.addAttribute("orderList", list);

@@ -16,6 +16,7 @@
     <script src="https://npmcdn.com/flatpickr/dist/l10n/ko.js"></script>
 </head>
 <body class="container-fluid">
+
 <div class="row justify-content-center mt-5">
     <h1 class="text-center">주문 관리 페이지</h1>
 </div>
@@ -24,7 +25,8 @@
     <div>
         <button class="btn btn-secondary" onclick="window.location.href = '/admin/main'">뒤로 가기</button>
     </div>
-    <form class="mt-2">
+    <form class="mt-2" th:object="${orderRequest}">
+        <p hidden th:each="error : ${#fields.allErrors()}" th:text="${error.toString()}" id="errmsg"></p>
         <div class="mb-3">
             <label for="emailSelect" class="form-label"><b>주문자 이메일 선택</b></label>
             <select id="emailSelect" class="form-select" onchange="selectEmail(this)">
@@ -39,7 +41,11 @@
             <label for="emailSelect" class="form-label"><b>주문자 이메일 검색</b></label>
             <input type="text" class="form-control" th:value="${param.userEmail}" name="userEmail"/>
             <div class="mt-2">
-                <label for="emailSelect" class="form-label"><b>날짜 범위</b></label>
+                <div>
+                    <label for="emailSelect" class="form-label"><b>날짜 범위&nbsp</b></label>
+                    <label for="emailSelect" class="form-label">최대 3개월까지 조회 가능합니다</label>
+                </div>
+
                 <input name="dayFrom" type="text" id="myDatepickerFrom"/>
                 <span> ~ </span>
                 <input name="dayUntil" type="text" id="myDatepickerUntil"/>
@@ -170,29 +176,37 @@
         }
     )
 </script>
+
 <script>
     const urlParams = new URLSearchParams(window.location.search).get('dayFrom');
     const today = new Date();
+    const minDate = new Date()
     let dayFrom = new Date();
-    try {
+    minDate.setDate(today.getDate()-90)
 
-    } catch {
+    if (urlParams !== null) {
+        dayFrom = new Date(urlParams);
+    } else {
         dayFrom.setDate(today.getDate() - 7);
     }
 
     flatpickr('#myDatepickerFrom', {
         "locale": "ko",
-        defaultDate: new Date(urlParams)
-    })
-
-    flatpickr('#myDatepickerFrom', {
-        "locale": "ko",
-        defaultDate: dayFrom
+        defaultDate: dayFrom,
+        enable: [{ from:minDate, to: today}]
     });
     flatpickr('#myDatepickerUntil', {
-        "locale": "ko",  // locale for this instance only
-        defaultDate: today
+        "locale": "ko",
+        defaultDate: today,
+        enable: [{ from: minDate, to:today }]
     });
+</script>
+<script>
+    window.onload = ()=>{
+        alert(document.getElementById('errmsg').textContent)
+        window.history.go(-1)
+    }
+
 </script>
 </body>
 </html>
