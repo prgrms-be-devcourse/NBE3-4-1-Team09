@@ -41,7 +41,7 @@ public class CustomerOrder {
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreatedDate
     @Setter(AccessLevel.PRIVATE)
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
 
     @Getter
