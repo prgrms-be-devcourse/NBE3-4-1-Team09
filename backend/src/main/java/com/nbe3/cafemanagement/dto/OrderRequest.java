@@ -21,12 +21,12 @@ public class OrderRequest {
     private LocalDate dayFrom = LocalDate.now().minusWeeks(1);
     private LocalDate dayUntil = LocalDate.now();
     private int page = 1;
-    private int pageSize = 30;
+    private int pageSize = 10;
 
-    @AssertTrue(message = "날짜는 최대 3개월간 조회할 수 있습니다")
+    @AssertTrue(message = "날짜는 최대 1개월간 조회할 수 있습니다")
     public boolean isDateValid() {
         LocalDate today = LocalDate.now();
-        LocalDate minDate = today.minus(Period.ofMonths(3));
+        LocalDate minDate = today.minus(Period.ofMonths(1));
         return(dayFrom.isAfter(minDate) || dayFrom.isEqual(minDate))
             &&( dayFrom.isBefore(today) || dayFrom.isEqual(today))
             && (dayUntil.isAfter(minDate) || dayUntil.isEqual(minDate))
