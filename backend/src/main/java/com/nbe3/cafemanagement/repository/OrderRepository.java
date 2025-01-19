@@ -26,4 +26,5 @@ public interface OrderRepository extends JpaRepository<CustomerOrder, Long> {
                                 @Param("dayFrom") LocalDate dayFrom,
                                 @Param("dayUntil") LocalDate dayUntil,
                                 Pageable pageable);
+    List<CustomerOrder> findByEmailOrderByCreatedAtDesc(String email);
 }
