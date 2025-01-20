@@ -1,17 +1,24 @@
 package com.nbe3.cafemanagement.utils;
 
+import com.nbe3.cafemanagement.service.AdminService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AdminService adminService) throws Exception {
+        // 핸들러 생성
+        AuthenticationFailureHandler authenticationFailureHandler = new CustomAuthenticationFailureHandler(adminService);
+        AuthenticationSuccessHandler authenticationSuccessHandler = new CustomAuthenticationSuccessHandler(adminService);
+
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
@@ -32,7 +39,10 @@ public class SecurityConfig {
                         .loginPage("/admin/login")
                         .loginProcessingUrl("/admin/login")
                         .defaultSuccessUrl("/admin/main", true)
-                        .failureUrl("/admin/login?error=true")
+                        .successHandler(authenticationSuccessHandler) // 성공 핸들러 설정
+                        .failureHandler(authenticationFailureHandler) // 실패 핸들러 설정
+                        .usernameParameter("username")
+                        .passwordParameter("password")
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -44,6 +54,17 @@ public class SecurityConfig {
                 ;
         return http.build();
     }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return (request, response, authentication) -> {
+            String username = authentication.getName();
+
+            // 로그인 성공 시 실패 횟수 초기화
+            response.sendRedirect("/admin/main");
+        };
+    }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

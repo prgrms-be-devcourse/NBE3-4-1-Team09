@@ -15,8 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public class AdminService implements UserDetailsService {
+public class AdminService implements UserDetailsService, FailedLoginService {
 
+    private static final int MAX_FAILED_ATTEMPTS = 3; // 최대 실패 횟수
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -28,13 +29,50 @@ public class AdminService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Admin admin = adminRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("ID를 찾을 수 없습니다: " + username));
+
+        if (admin.isBlocked()) {
+            throw new RuntimeException("계정이 블록되었습니다. ");
+        }
 
         return User.builder()
                 .username(admin.getUsername())
                 .password(admin.getPassword())
                 .roles("ADMIN")  // 권한 설정
                 .build();
+    }
+
+    // 로그인 실패 시 실패 횟수 증가
+    @Override
+    @Transactional
+    public void increaseFailedAttempts(String username) {
+        adminRepository.findByUsername(username).ifPresent(admin -> {
+            int attempts = admin.getFailedAttempts() + 1;
+            admin.setFailedAttempts(attempts);
+
+            if (attempts >= MAX_FAILED_ATTEMPTS) {
+                admin.setBlocked(true); // 계정 블록 처리
+            }
+
+            adminRepository.save(admin);
+        });
+    }
+
+    // 로그인 성공 시 실패 횟수 초기화
+    public void resetFailedAttempts(String username) {
+        adminRepository.findByUsername(username).ifPresent(admin -> {
+            admin.setFailedAttempts(0); // 실패 횟수 초기화
+            adminRepository.save(admin); // 데이터베이스에 저장
+        });
+    }
+
+    // 계정이 블록 상태인지 확인
+    public boolean isAccountBlocked(String username) {
+        boolean blocked = adminRepository.findByUsername(username)
+                .map(Admin::isBlocked)
+                .orElse(false);
+        System.out.println("Account blocked status for " + username + ": " + blocked);
+        return blocked;
     }
 
     // 회원가입 처리 메서드
