@@ -13,7 +13,6 @@ import java.time.LocalDate;
 
 
 public interface OrderRepository extends JpaRepository<CustomerOrder, Long> {
-    List<CustomerOrder> findByEmailOrderByOrderDate(String email);
     @NonNull
     @Query(
         "select o from CustomerOrder o\n"+
