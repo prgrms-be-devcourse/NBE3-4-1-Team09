@@ -10,18 +10,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface AdminOrderManageRepository extends JpaRepository<OrderDetail, BigInteger> {
-    @Query("SELECT od FROM OrderDetail od\n" +
-        "JOIN fetch od.customerOrder o\n" +
-        "JOIN fetch od.product p\n" +
-        "where o.email like %:userEmail% and\n" +
-        "p.name like %:searchParam%\n"+
-        "ORDER BY o.orderDate desc")
-    List<OrderDetail> findAll(@Param("userEmail") String userEmail,
-                              @Param("searchParam") String searchParam
-                              );
 
     @NonNull
     @Query("SELECT od FROM OrderDetail od\n" +

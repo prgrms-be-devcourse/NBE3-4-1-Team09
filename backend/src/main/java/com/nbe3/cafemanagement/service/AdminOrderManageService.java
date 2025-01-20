@@ -7,6 +7,7 @@ import com.nbe3.cafemanagement.dto.OrderResponse;
 import com.nbe3.cafemanagement.dto.ProductExtendedInfo;
 import com.nbe3.cafemanagement.dto.SetStateRequest;
 import com.nbe3.cafemanagement.repository.AdminOrderManageRepository;
+import com.nbe3.cafemanagement.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -17,26 +18,18 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AdminOrderManageService {
     private final AdminOrderManageRepository adminOrderManageRepository;
+    private final OrderRepository orderRepository;
 
     public Page<OrderResponse> getList(OrderRequest orderRequest) {
         //Todo 정렬 기준 합의 후 설정 기본값은 주문 순으로
-        Pageable pageable = PageRequest.of(orderRequest.getPage()-1, orderRequest.getPageSize(), Sort.by(Sort.Direction.DESC, "order.orderDate"));
-        Map<Long, List<ProductExtendedInfo>> productMap = new HashMap<>();
-
-        List<OrderResponse> orderResponses = adminOrderManageRepository.findAll(orderRequest.getUserEmail(), orderRequest.getSearchParam()).stream().map(
-            orderDetail -> {
-                List<ProductExtendedInfo> list = productMap.computeIfAbsent(orderDetail.getCustomerOrder().getId(), it->new ArrayList<>());
-                ProductExtendedInfo productDto = new ProductExtendedInfo();
-                productDto.setProduct(orderDetail.getProduct());
-                productDto.setPrice(orderDetail.getPrice());
-                productDto.setQuantity(orderDetail.getQuantity());
-                list.add(productDto);
-                if (list.size() != 1) return null;
-                return toOrderResponse(orderDetail,productMap);
-            }
-        ).toList();
-        List<OrderResponse> discarded = orderResponses.stream().filter(Objects::nonNull).toList();
-        return new PageImpl<>(discarded, pageable, discarded.size());
+        Pageable pageable = PageRequest.of(orderRequest.getPage()-1, orderRequest.getPageSize(), Sort.by(Sort.Direction.DESC, "orderDate"));
+        return orderRepository.findAll(
+            orderRequest.getUserEmail(),
+            orderRequest.getDayFrom(),
+            orderRequest.getDayUntil(),
+            pageable).map(
+            this::toOrderResponse
+        );
     }
 
     public List<String> getAllUsers() {
@@ -57,8 +50,7 @@ public class AdminOrderManageService {
 
 
 
-    private OrderResponse toOrderResponse(OrderDetail orderDetail, Map<Long, List<ProductExtendedInfo>> productMap) {
-        CustomerOrder customerOrder = orderDetail.getCustomerOrder();
+    private OrderResponse toOrderResponse(CustomerOrder customerOrder) {
         return OrderResponse.builder()
             .email(customerOrder.getEmail())
             .address(customerOrder.getAddress())
@@ -66,7 +58,19 @@ public class AdminOrderManageService {
             .status(customerOrder.getStatus())
             .totalPrice(customerOrder.getTotalPrice())
             .orderId(customerOrder.getId())
-            .products(productMap.get(customerOrder.getId()))
+            .products(toProductExtendedInfo(customerOrder.getOrderDetails()))
             .build();
+    }
+
+    private List<ProductExtendedInfo> toProductExtendedInfo(List<OrderDetail> orderDetails) {
+        return orderDetails.stream().map(
+            orderDetail -> {
+                ProductExtendedInfo productExtendedInfo = new ProductExtendedInfo();
+                productExtendedInfo.setPrice(orderDetail.getPrice());
+                productExtendedInfo.setQuantity(orderDetail.getQuantity());
+                productExtendedInfo.setProduct(orderDetail.getProduct());
+                return productExtendedInfo;
+            }
+        ).toList();
     }
 }
