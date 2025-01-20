@@ -79,6 +79,8 @@ document.querySelector('.btn-dark.payment').addEventListener('click', function (
     document.getElementById('products').value = JSON.stringify(products); // 숨겨진 input에 JSON 문자열 추가
     document.getElementById('totalAmount').value = totalAmount;
 
+    alert("결제가 완료 되었습니다.")
+
     // Form 제출
     document.getElementById('order-form').submit();
 });
