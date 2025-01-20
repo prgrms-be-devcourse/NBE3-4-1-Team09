@@ -23,13 +23,13 @@ public class OrderRequest {
     private int page = 1;
     private int pageSize = 10;
 
-    @AssertTrue(message = "날짜는 최대 1개월간 조회할 수 있습니다")
+    @AssertTrue(message = "날짜는 최대 1개월 단위로 조회할 수 있습니다")
     public boolean isDateValid() {
         LocalDate today = LocalDate.now();
-        LocalDate minDate = today.minus(Period.ofMonths(1));
-        return(dayFrom.isAfter(minDate) || dayFrom.isEqual(minDate))
-            &&( dayFrom.isBefore(today) || dayFrom.isEqual(today))
-            && (dayUntil.isAfter(minDate) || dayUntil.isEqual(minDate))
-            &&( dayUntil.isBefore(today) || dayUntil.isEqual(today));
+        LocalDate maxDate = dayFrom.plus(Period.ofMonths(1));
+        return ( dayFrom.isBefore(today) || dayFrom.isEqual(today))
+            && ( dayUntil.isBefore(maxDate) || dayUntil.isEqual(maxDate))
+            && ( dayUntil.isBefore(today) || dayUntil.isEqual(today)
+        );
     }
 }

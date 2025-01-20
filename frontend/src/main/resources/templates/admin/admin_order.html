@@ -207,10 +207,9 @@
     const urlParamsUntil = new URLSearchParams(window.location.search).get('dayUntil');
 
     const today = new Date();
-    const minDate = new Date()
+    const minDate = "1900-01-01"
     let dayFrom = new Date();
     let dayUntil = new Date();
-    minDate.setDate(today.getDate()-30)
 
     if (urlParamsFrom !== null) {
         dayFrom = new Date(urlParamsFrom);
@@ -224,15 +223,66 @@
         dayUntil.setDate(today.getDate());
     }
 
-    flatpickr('#myDatepickerFrom', {
+    const fpStart = flatpickr('#myDatepickerFrom', {
         "locale": "ko",
         defaultDate: dayFrom,
-        enable: [{ from:minDate, to: today}]
+        enable: [
+            { from:minDate, to: today}
+        ],
+        onChange: function(selectedDates, dateStr, instance) {
+            if (selectedDates.length > 0) {
+                let maxEndDate = new Date(selectedDates[0]);
+                let nextMonth = selectedDates[0].getMonth() + 1;
+                let nextYear = selectedDates[0].getFullYear();
+
+                if (nextMonth > 11) {
+                    nextMonth = 0;
+                    nextYear++;
+                }
+
+                maxEndDate.setFullYear(nextYear);
+                maxEndDate.setMonth(nextMonth);
+                maxEndDate.setDate(selectedDates[0].getDate());
+                if (maxEndDate.getMonth() !== nextMonth) {
+                    maxEndDate.setDate(0);
+                }
+                maxEndDate.setHours(0, 0, 0, 0);
+                const maxEndDateStr = maxEndDate.toISOString().slice(0, 10);
+                fpEnd.set("maxDate", maxEndDateStr);
+            } else {
+                fpEnd.set("maxDate", null);
+            }
+        }
     });
-    flatpickr('#myDatepickerUntil', {
+
+    const fpEnd = flatpickr('#myDatepickerUntil', {
         "locale": "ko",
         defaultDate: dayUntil,
-        enable: [{ from: minDate, to:today }]
+        enable:[
+            function(date) {
+                const startDate = fpStart.selectedDates[0];
+                if (!startDate) return false;
+
+                let maxEndDate = new Date(startDate);
+                let nextMonth = startDate.getMonth() + 1;
+                let nextYear = startDate.getFullYear();
+
+                if (nextMonth > 11) {
+                    nextMonth = 0;
+                    nextYear++;
+                }
+
+                maxEndDate.setFullYear(nextYear);
+                maxEndDate.setMonth(nextMonth);
+                maxEndDate.setDate(startDate.getDate());
+                if (maxEndDate.getMonth() !== nextMonth) {
+                    maxEndDate.setDate(0);
+                }
+                maxEndDate.setHours(0, 0, 0, 0);
+
+                return date >= startDate && date <= maxEndDate && date<=today;
+            }
+        ]
     });
 </script>
 <script>
