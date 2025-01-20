@@ -2,6 +2,7 @@ package com.nbe3.cafemanagement.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -13,6 +14,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = IDENTITY)
