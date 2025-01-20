@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 관리</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    <link href="/css/admin_order.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/ko.js"></script>
+</head>
+<body class="container-fluid">
+
+<div class="row justify-content-center mt-5">
+    <h1 class="text-center">주문 관리 페이지</h1>
+</div>
+
+<div class="card p-4 mt-4">
+    <div>
+        <button class="btn btn-secondary" onclick="window.location.href = '/admin/main'">뒤로 가기</button>
+    </div>
+    <form class="mt-2" th:object="${orderRequest}">
+        <p hidden th:each="error : ${#fields.allErrors()}" th:text="${error.toString()}" id="errmsg"></p>
+        <div class="mb-3">
+            <label for="emailSelect" class="form-label"><b>주문자 이메일 선택</b></label>
+            <select id="emailSelect" class="form-select" onchange="selectEmail(this)">
+                <!-- 이메일 목록을 데이터베이스에서 가져와 표시 -->
+                <option value="">전체</option>
+                <option th:each="user : ${users}" th:value="${user}" th:text="${user}"></option>
+            </select>
+        </div>
+    </form>
+    <form id="search">
+        <div class="mb-3 justify-content-between">
+            <label for="emailSelect" class="form-label"><b>주문자 이메일 검색</b></label>
+            <input type="text" class="form-control" th:value="${param.userEmail}" name="userEmail"/>
+            <div class="mt-2">
+                <div>
+                    <label for="emailSelect" class="form-label"><b>날짜 범위&nbsp</b></label>
+                    <label for="emailSelect" class="form-label">최대 1개월까지 조회 가능합니다</label>
+                </div>
+
+                <input name="dayFrom" type="text" id="myDatepickerFrom"/>
+                <span> ~ </span>
+                <input name="dayUntil" type="text" id="myDatepickerUntil"/>
+            </div>
+            <input type="hidden" id="page" name="page" value="1">
+            <input class='btn btn-primary mt-2' type="submit"/>
+        </div>
+    </form>
+
+    <div id="orderDetails" class="mt-4">
+        <h5>주문 내역</h5>
+        <table class="table table-bordered mt-2">
+            <thead>
+            <tr>
+                <th>이메일</th>
+                <th>주소</th>
+                <th>주문일</th>
+                <th>결제금액</th>
+                <th>주문상품</th>
+                <th>배송상태</th>
+            </tr>
+            </thead>
+            <tbody id="orderTableBody">
+            <!-- 주문 내역을 선택된 이메일에 따라 동적으로 표시 -->
+            <tr th:each="order, loop : ${orderList}">
+                <td th:text="${order.email}"></td>
+                <td th:text="${order.address}"></td>
+                <td th:text="${order.orderDate}"></td>
+                <td th:text="${order.totalPrice}"></td>
+                <td>
+                    <ul>
+                        <li th:each="product : ${order.products}">
+                            <span th:text="${product.quantity} + 개"></span>
+                            <span th:text="${product.product.name}"></span>
+                        </li>
+                    </ul>
+                </td>
+                <td>
+                    <form th:attr="data-orderId=${order.orderId}" onsubmit="updateStatus(this)" class="update-state">
+                        <label>
+                            <select>
+                                <option th:selected="${order.status.name() == 'PREPARING'}" th:attr="disabled=${order.status.name() == 'PREPARING'} ? 'disabled' : null" value="PREPARING">배송준비</option>
+                                <option th:selected="${order.status.name() == 'SHIPPING'}"  th:attr="disabled=${order.status.name() == 'SHIPPING'} ? 'disabled' : null" value="SHIPPING">배송중</option>
+                                <option th:selected="${order.status.name() == 'DELIVERED'}" th:attr="disabled=${order.status.name() == 'DELIVERED'} ? 'disabled' : null" value="DELIVERED">배송완료</option>
+                            </select>
+                        </label>
+                        <input type="submit" value="수정"/>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:if="${orderList != null && !orderList.isEmpty()}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${!orderList.hasPrevious} ? 'disabled'">
+                    <a class="page-link"
+                       href="javascript:void(0)" th:data-page="${orderList.number - 1}">
+                        <span>이전</span>
+                    </a>
+                </li>
+
+                <li th:each="page: ${#numbers.sequence(0, orderList.totalPages - 1)}"
+                    th:if="${page >= orderList.number - 5 and page <= orderList.number+5}"
+                    th:classappend="${page == orderList.number} ? 'active'"
+                    class="page-item">
+                    <a th:text="${page+1}" class="page-link" href="javascript:void(0)" th:data-page="${page+1}"></a>
+                </li>
+
+                <li class="page-item" th:classappend="${!orderList.hasNext} ? 'disabled'">
+                    <a class="page-link" href="javascript:void(0)" th:data-page="${orderList.number+1}">
+                        <span>다음</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function selectEmail(element) {
+        if (element.value !== "") {
+            window.location = "/admin/order?userEmail=" + element.value
+        } else {
+            window.location = "/admin/order"
+        }
+    }
+
+    function updateStatus(e) {
+        const selectedStatus = e.querySelector('select').value;
+        let status = ""
+        switch (selectedStatus) {
+            case 'PREPARING':
+                status = "배송준비"
+                break; // break 문은 선택적이지만, 매우 중요합니다.
+            case 'SHIPPING':
+                status = "배송중"
+                break;
+            case 'DELIVERED':
+                status = "배송완료"
+                break;
+        }
+
+        if (!confirm("배송 상태를 '"+status+"' 로 바꾸시겠습니까?")) {
+            return
+        }
+
+        const data = {
+            orderId: e.dataset.orderid,
+            status: selectedStatus
+        }
+
+        console.log(data)
+
+        fetch("/admin/editStatus", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        }).then(
+            res=> {
+                if (res.status === 200) {
+                    alert("성공했습니다")
+                    window.location.reload()
+                } else {
+                    alert("실패했습니다")
+                }
+            }
+        ).catch(
+            err=> {
+                alert("예상치 못한 오류가 발생했습니다")
+            }
+        )
+    }
+</script>
+<script>
+    function selectOptionByParameter() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedValue = urlParams.get('userEmail');
+
+        if (selectedValue) {
+            Array.from(window.document.getElementsByTagName("option")).forEach(
+                element=>{
+                    if (element.value === selectedValue) {
+                        element.selected = true
+                    }
+                }
+            )
+        }
+    }
+    window.onload = selectOptionByParameter; // 페이지 로드 후 실행
+    Array.from(document.getElementsByClassName("update-state")).forEach(
+        item=>{
+            item.addEventListener('submit', (event)=>{event.preventDefault()})
+        }
+    )
+</script>
+
+<script>
+    const urlParamsFrom = new URLSearchParams(window.location.search).get('dayFrom');
+    const urlParamsUntil = new URLSearchParams(window.location.search).get('dayUntil');
+
+    const today = new Date();
+    const minDate = "1900-01-01"
+    let dayFrom = new Date();
+    let dayUntil = new Date();
+
+    if (urlParamsFrom !== null) {
+        dayFrom = new Date(urlParamsFrom);
+    } else {
+        dayFrom.setDate(today.getDate() - 7);
+    }
+
+    if (urlParamsUntil !== null) {
+        dayUntil = new Date(urlParamsUntil);
+    } else {
+        dayUntil.setDate(today.getDate());
+    }
+
+    const fpStart = flatpickr('#myDatepickerFrom', {
+        "locale": "ko",
+        defaultDate: dayFrom,
+        enable: [
+            { from:minDate, to: today}
+        ],
+        onChange: function(selectedDates, dateStr, instance) {
+            if (selectedDates.length > 0) {
+                let maxEndDate = new Date(selectedDates[0]);
+                let nextMonth = selectedDates[0].getMonth() + 1;
+                let nextYear = selectedDates[0].getFullYear();
+
+                if (nextMonth > 11) {
+                    nextMonth = 0;
+                    nextYear++;
+                }
+
+                maxEndDate.setFullYear(nextYear);
+                maxEndDate.setMonth(nextMonth);
+                maxEndDate.setDate(selectedDates[0].getDate());
+                if (maxEndDate.getMonth() !== nextMonth) {
+                    maxEndDate.setDate(0);
+                }
+                maxEndDate.setHours(0, 0, 0, 0);
+                const maxEndDateStr = maxEndDate.toISOString().slice(0, 10);
+                fpEnd.set("maxDate", maxEndDateStr);
+            } else {
+                fpEnd.set("maxDate", null);
+            }
+        }
+    });
+
+    const fpEnd = flatpickr('#myDatepickerUntil', {
+        "locale": "ko",
+        defaultDate: dayUntil,
+        enable:[
+            function(date) {
+                const startDate = fpStart.selectedDates[0];
+                if (!startDate) return false;
+
+                let maxEndDate = new Date(startDate);
+                let nextMonth = startDate.getMonth() + 1;
+                let nextYear = startDate.getFullYear();
+
+                if (nextMonth > 11) {
+                    nextMonth = 0;
+                    nextYear++;
+                }
+
+                maxEndDate.setFullYear(nextYear);
+                maxEndDate.setMonth(nextMonth);
+                maxEndDate.setDate(startDate.getDate());
+                if (maxEndDate.getMonth() !== nextMonth) {
+                    maxEndDate.setDate(0);
+                }
+                maxEndDate.setHours(0, 0, 0, 0);
+
+                return date >= startDate && date <= maxEndDate && date<=today;
+            }
+        ]
+    });
+</script>
+<script>
+    window.onload = ()=>{
+        if (document.getElementById('errmsg') === null) return
+        alert(document.getElementById('errmsg').textContent)
+        window.history.go(-1)
+    }
+</script>
+<script>
+    const page_elements = document.getElementsByClassName("page-link");
+    Array.from(page_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            document.getElementById('page').value = this.dataset.page;
+            document.getElementById('search').submit();
+        });
+    });
+</script>
+</body>
+</html>
