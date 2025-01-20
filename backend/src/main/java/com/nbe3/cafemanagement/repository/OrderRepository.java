@@ -17,9 +17,9 @@ public interface OrderRepository extends JpaRepository<CustomerOrder, Long> {
 
     @NonNull
     @Query(
-        "select o from CustomerOrder o\n"+
-        "JOIN o.orderDetails od\n" +
-        "JOIN od.product p\n" +
+        "select DISTINCT o from CustomerOrder o\n"+
+        "JOIN FETCH o.orderDetails od\n" +
+        "JOIN FETCH od.product p\n" +
         "where o.email like %:userEmail% and\n" +
         "o.orderDate between :dayFrom and :dayUntil\n"
     )
