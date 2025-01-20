@@ -50,7 +50,7 @@
                 <span> ~ </span>
                 <input name="dayUntil" type="text" id="myDatepickerUntil"/>
             </div>
-            <input type="hidden" id="page" name="page" th:value="${orderList.number+1}">
+            <input type="hidden" id="page" name="page" value="1">
             <input class='btn btn-primary mt-2' type="submit"/>
         </div>
     </form>
@@ -203,16 +203,25 @@
 </script>
 
 <script>
-    const urlParams = new URLSearchParams(window.location.search).get('dayFrom');
+    const urlParamsFrom = new URLSearchParams(window.location.search).get('dayFrom');
+    const urlParamsUntil = new URLSearchParams(window.location.search).get('dayUntil');
+
     const today = new Date();
     const minDate = new Date()
     let dayFrom = new Date();
+    let dayUntil = new Date();
     minDate.setDate(today.getDate()-30)
 
-    if (urlParams !== null) {
-        dayFrom = new Date(urlParams);
+    if (urlParamsFrom !== null) {
+        dayFrom = new Date(urlParamsFrom);
     } else {
         dayFrom.setDate(today.getDate() - 7);
+    }
+
+    if (urlParamsUntil !== null) {
+        dayUntil = new Date(urlParamsUntil);
+    } else {
+        dayUntil.setDate(today.getDate());
     }
 
     flatpickr('#myDatepickerFrom', {
@@ -222,7 +231,7 @@
     });
     flatpickr('#myDatepickerUntil', {
         "locale": "ko",
-        defaultDate: today,
+        defaultDate: dayUntil,
         enable: [{ from: minDate, to:today }]
     });
 </script>

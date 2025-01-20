@@ -2,11 +2,13 @@ package com.nbe3.cafemanagement.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -54,4 +56,8 @@ public class CustomerOrder {
         private final String status;
 
     }
+
+    @OneToMany(mappedBy = "customerOrder")
+    @BatchSize(size = 100)
+    private List<OrderDetail> orderDetails;
 }
