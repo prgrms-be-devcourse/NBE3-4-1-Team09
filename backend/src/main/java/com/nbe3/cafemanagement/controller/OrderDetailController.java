@@ -12,10 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,28 +27,30 @@ public class OrderDetailController {
 
     @GetMapping()
     public String orderDetail(
-            OrderDetailDto orderDetailDto,
-            @RequestParam(name = "email", required = false) String email,
-            @RequestParam(name = "page", defaultValue = "0") int page,
+            @ModelAttribute OrderDetailDto orderDetailDto,
             Model model
     ) {
-        if (email == null || email.isEmpty()) {
+        if (orderDetailDto.getEmail() == null || orderDetailDto.getEmail().isEmpty()) {
             return "order/orderDetail";
         }
 
-        List<CustomerOrder> orders = orderService.findByEmailOrderByCreatedAtDesc(email);
+        List<CustomerOrder> orders = orderService.getOrderList(
+                orderDetailDto.getEmail(),
+                orderDetailDto.getDayFrom(),
+                orderDetailDto.getDayUntil()
+        );
 
         List<OrderDetail> orderDetails = new ArrayList<>();
         for (CustomerOrder order : orders) {
             orderDetails.addAll(orderDetailService.findByCustomerOrderId(order.getId()));
         }
 
-        Page<OrderDetail> orderDetailsPage = orderDetailService.pagination(orderDetails, page);
+        Page<OrderDetail> orderDetailsPage = orderDetailService.pagination(orderDetails, orderDetailDto.getPage());
 
         model.addAttribute("orders", orders);
         model.addAttribute("orderDetails", orderDetailsPage.getContent());
         model.addAttribute("page", orderDetailsPage);
-        model.addAttribute("email", email);
+        model.addAttribute("email", orderDetailDto.getEmail());
 
         return "order/orderDetail";
     }
@@ -62,9 +61,15 @@ public class OrderDetailController {
                               BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(error -> System.out.println(error.getDefaultMessage()));
             return "order/orderDetail";
         }
 
-        return "redirect:/orderDetail?email=%s".formatted(orderDetailDto.getEmail());
+        return "redirect:/orderDetail?email=%s&dayFrom=%s&dayUntil=%s"
+                .formatted(
+                        orderDetailDto.getEmail(),
+                        orderDetailDto.getDayFrom(),
+                        orderDetailDto.getDayUntil()
+                );
     }
 }

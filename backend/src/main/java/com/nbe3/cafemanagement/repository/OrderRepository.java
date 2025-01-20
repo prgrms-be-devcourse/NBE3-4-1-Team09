@@ -8,12 +8,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.time.LocalDate;
 
 
 public interface OrderRepository extends JpaRepository<CustomerOrder, Long> {
     List<CustomerOrder> findByEmailOrderByCreatedAtDesc(String email);
+
+    List<CustomerOrder> findByEmailAndOrderDateBetweenOrderByCreatedAtDesc(String email, LocalDate dayFrom, LocalDate dayUntil);
 
     @NonNull
     @Query(

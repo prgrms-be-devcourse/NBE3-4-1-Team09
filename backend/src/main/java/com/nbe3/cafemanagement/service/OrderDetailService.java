@@ -50,7 +50,7 @@ public class OrderDetailService {
 
     public Page<OrderDetail> pagination(List<OrderDetail> orderDetails, int page) {
 
-        int pageSize = 5;
+        int pageSize = 10;
         int start = page * pageSize;
         int end = Math.min(start + pageSize, orderDetails.size());
 

@@ -38,4 +38,8 @@ public class OrderService {
     public List<CustomerOrder> findByEmailOrderByCreatedAtDesc(String email) {
         return orderRepository.findByEmailOrderByCreatedAtDesc(email);
     }
+
+    public List<CustomerOrder> getOrderList(String email, LocalDate dayFrom, LocalDate dayUntil) {
+        return orderRepository.findByEmailAndOrderDateBetweenOrderByCreatedAtDesc(email, dayFrom, dayUntil);
+    }
 }
