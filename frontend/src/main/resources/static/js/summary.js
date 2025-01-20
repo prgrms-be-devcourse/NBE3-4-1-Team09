@@ -48,20 +48,23 @@ function updateSummary() {
 document.querySelector('.btn-dark.payment').addEventListener('click', function (event) {
     event.preventDefault(); // 페이지 새로고침 방지
 
-    // 사용자 입력값 가져오기
+
     const emailInput = document.getElementById('email').value.trim();
-    if(!emailInput.includes("@")) {
-        alert('유효한 이메일 주소를 입력 해 주세요 ');
-        return;
-    }
     const addressInput = document.getElementById('address').value.trim();
     const postcodeInput = document.getElementById('postcode').value.trim();
     const addressDetailInput = document.getElementById('addressDetail').value.trim();
 
-    if (!emailInput || !addressInput || !postcodeInput) {
-        alert('모든 필드를 입력해주세요.');
-        return; // 입력이 안 된 경우 제출 중단
-    }
+  // 이메일 정규식 검사 (기본 형식: name@domain.com)
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(emailInput)) {
+          alert('유효한 이메일 주소를 입력해주세요. 예: example@domain.com');
+          return;
+      }
+
+      if (!addressInput || !postcodeInput) {
+          alert('모든 필드를 입력해주세요.');
+          return; // 입력이 안 된 경우 제출 중단
+      }
 
     // 상품 데이터 정리
     const products = Object.values(summaryItems).map((item) => ({
