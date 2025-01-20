@@ -50,7 +50,7 @@
                 <span> ~ </span>
                 <input name="dayUntil" type="text" id="myDatepickerUntil"/>
             </div>
-            <input type="hidden" id="page" name="page" th:value="${orderList.number+1}">
+            <input type="hidden" id="page" name="page" value="1">
             <input class='btn btn-primary mt-2' type="submit"/>
         </div>
     </form>
@@ -168,13 +168,16 @@
             body: JSON.stringify(data)
         }).then(
             res=> {
-                alert("성공했습니다")
-                window.location.reload()
+                if (res.status === 200) {
+                    alert("성공했습니다")
+                    window.location.reload()
+                } else {
+                    alert("실패했습니다")
+                }
             }
         ).catch(
             err=> {
                 alert("예상치 못한 오류가 발생했습니다")
-                window.location.reload()
             }
         )
     }
@@ -203,27 +206,86 @@
 </script>
 
 <script>
-    const urlParams = new URLSearchParams(window.location.search).get('dayFrom');
-    const today = new Date();
-    const minDate = new Date()
-    let dayFrom = new Date();
-    minDate.setDate(today.getDate()-30)
+    const urlParamsFrom = new URLSearchParams(window.location.search).get('dayFrom');
+    const urlParamsUntil = new URLSearchParams(window.location.search).get('dayUntil');
 
-    if (urlParams !== null) {
-        dayFrom = new Date(urlParams);
+    const today = new Date();
+    const minDate = "1900-01-01"
+    let dayFrom = new Date();
+    let dayUntil = new Date();
+
+    if (urlParamsFrom !== null) {
+        dayFrom = new Date(urlParamsFrom);
     } else {
         dayFrom.setDate(today.getDate() - 7);
     }
 
-    flatpickr('#myDatepickerFrom', {
+    if (urlParamsUntil !== null) {
+        dayUntil = new Date(urlParamsUntil);
+    } else {
+        dayUntil.setDate(today.getDate());
+    }
+
+    const fpStart = flatpickr('#myDatepickerFrom', {
         "locale": "ko",
         defaultDate: dayFrom,
-        enable: [{ from:minDate, to: today}]
+        enable: [
+            { from:minDate, to: today}
+        ],
+        onChange: function(selectedDates, dateStr, instance) {
+            if (selectedDates.length > 0) {
+                let maxEndDate = new Date(selectedDates[0]);
+                let nextMonth = selectedDates[0].getMonth() + 1;
+                let nextYear = selectedDates[0].getFullYear();
+
+                if (nextMonth > 11) {
+                    nextMonth = 0;
+                    nextYear++;
+                }
+
+                maxEndDate.setFullYear(nextYear);
+                maxEndDate.setMonth(nextMonth);
+                maxEndDate.setDate(selectedDates[0].getDate());
+                if (maxEndDate.getMonth() !== nextMonth) {
+                    maxEndDate.setDate(0);
+                }
+                maxEndDate.setHours(0, 0, 0, 0);
+                const maxEndDateStr = maxEndDate.toISOString().slice(0, 10);
+                fpEnd.set("maxDate", maxEndDateStr);
+            } else {
+                fpEnd.set("maxDate", null);
+            }
+        }
     });
-    flatpickr('#myDatepickerUntil', {
+
+    const fpEnd = flatpickr('#myDatepickerUntil', {
         "locale": "ko",
-        defaultDate: today,
-        enable: [{ from: minDate, to:today }]
+        defaultDate: dayUntil,
+        enable:[
+            function(date) {
+                const startDate = fpStart.selectedDates[0];
+                if (!startDate) return false;
+
+                let maxEndDate = new Date(startDate);
+                let nextMonth = startDate.getMonth() + 1;
+                let nextYear = startDate.getFullYear();
+
+                if (nextMonth > 11) {
+                    nextMonth = 0;
+                    nextYear++;
+                }
+
+                maxEndDate.setFullYear(nextYear);
+                maxEndDate.setMonth(nextMonth);
+                maxEndDate.setDate(startDate.getDate());
+                if (maxEndDate.getMonth() !== nextMonth) {
+                    maxEndDate.setDate(0);
+                }
+                maxEndDate.setHours(0, 0, 0, 0);
+
+                return date >= startDate && date <= maxEndDate && date<=today;
+            }
+        ]
     });
 </script>
 <script>

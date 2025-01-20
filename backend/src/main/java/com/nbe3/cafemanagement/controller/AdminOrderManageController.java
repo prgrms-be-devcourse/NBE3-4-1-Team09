@@ -19,8 +19,9 @@ public class AdminOrderManageController {
     private final AdminOrderManageService adminOrderManageService;
 
     @PostMapping("/admin/editStatus")
-    public String editState(@Valid @RequestBody SetStateRequest setStateRequest) {
+    @ResponseBody
+    public ResponseEntity<String> editState(@Valid @RequestBody SetStateRequest setStateRequest) {
         adminOrderManageService.updateStatus(setStateRequest);
-        return "admin/admin_order";
+        return ResponseEntity.ok().body("성공");
     }
 }
