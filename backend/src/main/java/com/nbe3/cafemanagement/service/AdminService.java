@@ -26,6 +26,7 @@ public class AdminService implements UserDetailsService, FailedLoginService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // 로그인
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Admin admin = adminRepository.findByUsername(username)
