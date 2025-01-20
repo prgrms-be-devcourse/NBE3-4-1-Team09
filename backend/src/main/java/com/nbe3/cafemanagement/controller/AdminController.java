@@ -33,8 +33,10 @@ public class AdminController {
     // 관리자 로그인 화면
     @GetMapping("/login")
     public String loginPage(Model model, String error) {
-        if (error != null) {
-            model.addAttribute("errorMessage", "Invalid username or password.");
+        if ("true".equals(error)) {
+            model.addAttribute("errorMessage", "ID 와 Password를 확인해 주세요."); // 일반적인 로그인 실패 메시지
+        } else if ("blocked".equals(error)) {
+            model.addAttribute("errorMessage", "로그인 횟수 초과 계정 블록."); // 계정 블록 메시지
         }
         return "admin/admin_login";
     }
