@@ -50,6 +50,10 @@ document.querySelector('.btn-dark.payment').addEventListener('click', function (
 
     // 사용자 입력값 가져오기
     const emailInput = document.getElementById('email').value.trim();
+    if(!emailInput.includes("@")) {
+        alert('유효한 이메일 주소를 입력 해 주세요 ');
+        return;
+    }
     const addressInput = document.getElementById('address').value.trim();
     const postcodeInput = document.getElementById('postcode').value.trim();
     const addressDetailInput = document.getElementById('addressDetail').value.trim();
