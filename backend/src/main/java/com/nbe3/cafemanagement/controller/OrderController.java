@@ -24,14 +24,20 @@ public class OrderController {
             @Valid OrderDto orderDto,
             BindingResult bindingResult,
             @RequestParam(name = "totalAmount", defaultValue = "0") int totalAmount,
-            @RequestParam(name = "products", defaultValue = "") String products
+            @RequestParam(name = "products", defaultValue = "") String products,
+            @RequestParam(name = "addressDetail", defaultValue = "") String adressDetail
                           ) {
 
         if (bindingResult.hasErrors()) {
             return "main";
         }
 
-        CustomerOrder order = orderService.save(orderDto.getEmail(), orderDto.getAddress(), orderDto.getPostcode(), totalAmount);
+        CustomerOrder order = orderService.save(
+                orderDto.getEmail(),
+                orderDto.getAddress(),
+                orderDto.getPostcode(),
+                totalAmount,
+                adressDetail);
         orderDetailService.save(order, products);
 
         return "redirect:/master/checkProduct";

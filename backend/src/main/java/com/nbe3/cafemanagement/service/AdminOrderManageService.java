@@ -20,10 +20,15 @@ public class AdminOrderManageService {
 
     public Page<OrderResponse> getList(OrderRequest orderRequest) {
         //Todo 정렬 기준 합의 후 설정 기본값은 주문 순으로
-        Pageable pageable = PageRequest.of(orderRequest.getPage()-1, orderRequest.getPageSize(), Sort.by(Sort.Direction.DESC, "order.orderDate"));
+        Pageable pageable = PageRequest.of(orderRequest.getPage()-1, orderRequest.getPageSize(), Sort.by(Sort.Direction.DESC, "customerOrder.orderDate"));
         Map<Long, List<ProductExtendedInfo>> productMap = new HashMap<>();
 
-        List<OrderResponse> orderResponses = adminOrderManageRepository.findAll(orderRequest.getUserEmail(), orderRequest.getSearchParam()).stream().map(
+        List<OrderResponse> orderResponses = adminOrderManageRepository.findAll(
+            orderRequest.getUserEmail(),
+            orderRequest.getSearchParam(),
+            orderRequest.getDayFrom(),
+            orderRequest.getDayUntil()
+        ).stream().map(
             orderDetail -> {
                 List<ProductExtendedInfo> list = productMap.computeIfAbsent(orderDetail.getCustomerOrder().getId(), it->new ArrayList<>());
                 ProductExtendedInfo productDto = new ProductExtendedInfo();
@@ -36,7 +41,10 @@ public class AdminOrderManageService {
             }
         ).toList();
         List<OrderResponse> discarded = orderResponses.stream().filter(Objects::nonNull).toList();
-        return new PageImpl<>(discarded, pageable, discarded.size());
+
+        int pageStart = Math.min((orderRequest.getPage()-1)*orderRequest.getPageSize(), discarded.size());
+        int pageEnd = Math.min(pageStart + orderRequest.getPageSize(), discarded.size());
+        return new PageImpl<>(discarded.subList(pageStart, pageEnd), pageable, discarded.size());
     }
 
     public List<String> getAllUsers() {

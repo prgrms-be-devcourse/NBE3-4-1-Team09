@@ -13,10 +13,10 @@
 <body class="container mt-5">
 <h1 class="text-center mb-4">제품 관리 페이지</h1>
 <div>
-  <a th:href="@{|/src/main/resources/templates/admin/main|}" class="btn btn-primary btn-sm">관리자 홈</a>
+  <a th:href="@{|/admin/main|}" class="btn btn-primary btn-sm">관리자 홈</a>
   <a th:href="@{|/master/checkProduct|}" class="btn btn-primary btn-sm">홈페이지</a>
 </div><br />
-<a th:href="@{|/src/main/resources/templates/admin/product/new|}" class="btn btn-primary btn-sm">제품 생성하기</a>
+<a th:href="@{|/admin/product/new|}" class="btn btn-primary btn-sm">제품 생성하기</a>
 
 <!-- 제품 목록 테이블 -->
 <table class="table table-bordered">
@@ -47,18 +47,18 @@
     </td>
     <td>
       <!-- 수정 버튼 -->
-      <a th:href="@{|/src/main/resources/templates/admin/product/edit/${product.id}|}" class="btn btn-primary btn-sm">수정</a>
+      <a th:href="@{|/admin/product/edit/${product.id}|}" class="btn btn-primary btn-sm">수정</a>
     </td>
     <td>
       <!-- 삭제 버튼 -->
-      <form th:object="${product}" method="post" th:action="@{/src/main/resources/templates/admin/product/delete/{id}(id=${product.id})}">
+      <form th:object="${product}" method="post" th:action="@{/admin/product/delete/{id}(id=${product.id})}">
         <button class="btn btn-danger btn-sm">삭제</button>
       </form>
     </td>
 
     <td>
       <!-- 비활성화 버튼 -->
-      <form th:object="${product}" method="post" th:action="@{/src/main/resources/templates/admin/product/inactive/{id}(id=${product.id})}">
+      <form th:object="${product}" method="post" th:action="@{/admin/product/inactive/{id}(id=${product.id})}">
         <button class="btn" th:classappend="${product.inactive ? 'btn-secondary' : 'btn-success'}"
                 th:text="${product.inactive ? '비활성' : '활성'}"></button>
       </form>
