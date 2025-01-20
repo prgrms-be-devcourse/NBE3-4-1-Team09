@@ -25,7 +25,7 @@ public class OrderController {
             BindingResult bindingResult,
             @RequestParam(name = "totalAmount", defaultValue = "0") int totalAmount,
             @RequestParam(name = "products", defaultValue = "") String products,
-            @RequestParam(name = "addressDetail", defaultValue = "") String adressDetail
+            @RequestParam(name = "addressDetail", defaultValue = "") String addressDetail
                           ) {
 
         if (bindingResult.hasErrors()) {
@@ -37,7 +37,7 @@ public class OrderController {
                 orderDto.getAddress(),
                 orderDto.getPostcode(),
                 totalAmount,
-                adressDetail);
+                addressDetail);
         orderDetailService.save(order, products);
 
         return "redirect:/master/checkProduct";
